@@ -1,0 +1,4 @@
+baseURL = 'https://yc2984.github.io'
+languageCode = 'en-us'
+title = "Yang's website"
+theme = 'ananke'
