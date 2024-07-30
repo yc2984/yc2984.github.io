@@ -107,15 +107,6 @@ Mount the volume:
 ```
 You can check the pod `calling-<your-model-name>`
 
-Known issue: when the min replica is set to zero, you will get this error for the first call(s) would get InvalidArgument error.
-https://github.com/kserve/kserve/issues/2882
-https://github.com/knative/serving/blob/main/docs/scaling/SYSTEM.md#scaling-from-zero
-```
- ERROR:                                                                                                                                │
-│   Code: InvalidArgument                                                                                                               │
-│   Message: Model my-model with version  is not ready yet. 
-```
-
 ***
 
 ## Running Performance Tests
@@ -123,10 +114,165 @@ To start a performance test, you need to run the following command:
 `export MODEL_NAME=<your-model-name>`
 `export CONTENT_LENGTH=38`
 `export CONCURRENCY=20`
-`export RPM=20`
+`export RPS=20`
+
+
+The script I used to do performance test, make sure to download the grpc_predict_v2.proto from kserve website. Make sure to replace the model's path on GCS. 
+```bash
+#!/bin/bash
+
+BASE_MODEL_NAME=$1
+CONTENT_LENGTH=$2
+CONCURRENCY=$3
+RPS=$4
+LOAD_SCHEDULE=$5
+TIMEOUT=$6
+MAX_DURATION=$7
+SCALING_METRIC=$8
+SCALING_TARGET=$9
+
+LOAD_SCHEDULE=${LOAD_SCHEDULE:-"step"}
+TIMEOUT=${TIMEOUT:-"30s"}
+MAX_DURATION=${MAX_DURATION:-"180s"}
+SCALING_METRIC=${SCALING_METRIC:-"rps"}
+SCALING_TARGET=${SCALING_TARGET:-"10"}
+
+MODEL_NAME=${BASE_MODEL_NAME}-${SCALING_METRIC}-${SCALING_TARGET}
+
+echo "MODEL_NAME: $MODEL_NAME"
+echo "CONTENT_LENGTH: $CONTENT_LENGTH"
+echo "CONCURRENCY: $CONCURRENCY"
+echo "RPS: $RPS"
+echo "LOAD_SCHEDULE: $LOAD_SCHEDULE"
+echo "TIMEOUT: $TIMEOUT"
+echo "MAX_DURATION: $MAX_DURATION"
+echo "SCALING_METRIC: $SCALING_METRIC"
+echo "SCALING_TARGET: $SCALING_TARGET"
+
+
+# Generate a list of numbers from 1 to CONTENT_LENGTH without a trailing comma
+FP32_CONTENTS=$(seq -s , 1 $CONTENT_LENGTH | sed 's/,$//')
+echo "FP32_CONTENTS: ${FP32_CONTENTS}"
+
+CONFIG_JSON=$(cat <<EOF
+{
+    "proto": "/protos/grpc_predict_v2.proto",
+    "call": "inference.GRPCInferenceService.ModelInfer",
+    "total": 200,
+    "concurrency": ${CONCURRENCY},
+    "rps": ${RPS},
+    "data": {
+        "model_name": "${MODEL_NAME}",
+        "inputs": [{
+            "name": "predict",
+            "shape": [1, $CONTENT_LENGTH],
+            "datatype": "FP32",
+            "contents": {
+                "fp32_contents": [$FP32_CONTENTS]
+            }
+        }]
+    },
+    "metadata": {
+        "foo": "bar",
+        "trace_id": "{{.RequestNumber}}",
+        "timestamp": "{{.TimestampUnix}}"
+    },
+    "load-schedule": "${LOAD_SCHEDULE}",
+    "load-start": 10,
+    "load-end": $RPS,
+    "load-step":5,
+    "load-step-duration":"5s",
+    "timeout": "${TIMEOUT}",
+    "import-paths": [
+        "/protos"
+    ],
+    "max-duration": "${MAX_DURATION}",
+    "host": "${MODEL_NAME}.kserve-test.svc.cluster.local:80"
+}
+EOF
+)
+
+echo "CONFIG_JSON: ${CONFIG_JSON}"
+
+kubectl create configmap ghz-config --from-literal=config.json="$CONFIG_JSON" -n kserve-test --dry-run=client -o yaml | kubectl apply -f - -n kserve-test
+
+
+# Deploy the model for the performance test
+cat <<EOF | kubectl apply -f -
+apiVersion: "serving.kserve.io/v1beta1"
+kind: "InferenceService"
+metadata:
+  name: ${MODEL_NAME}
+  namespace: kserve-test
+  annotations:
+    serving.kserve.io/secretName: storage-config
+spec:
+  predictor:
+    minReplicas: 0
+    scaleTarget: ${SCALING_TARGET}
+    scaleMetric: "${SCALING_METRIC}"
+    model:
+      resources: # Add this section
+        requests:
+          cpu: "100m"  # Request 100 milli-CPUs
+          memory: "200Mi"  # Request 200 MiB of memory
+        limits:
+          cpu: "500m"  # Limit to 500 milli-CPUs
+          memory: "500Mi"  # Limit to 500 MiB of memory
+      modelFormat:
+        name: xgboost
+      protocolVersion: v2
+      # This should be the path to the model file, but NOT include the file's name
+      # The file should be named like model.xxx
+      storageUri: gs://<path-to-model>
+      ports:
+        - name: h2c     # knative expects grpc port name to be 'h2c'
+          protocol: TCP
+          containerPort: 9000
+      readinessProbe:
+        httpGet:
+          path: /v2/models/${MODEL_NAME}/ready
+          port: 8080
+EOF
+sleep 180
+# Deploy the performance test job
+cat <<EOF | kubectl apply -f -
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: perf-${MODEL_NAME}-rps-${RPS}-cc-${CONCURRENCY}-ls-${LOAD_SCHEDULE}
+  namespace: kserve-test
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: ghz
+        image: obvionaoe/ghz
+        args:
+        - "--insecure"
+        - "--config"
+        - "/config/config.json"
+        volumeMounts:
+        - name: proto-files
+          mountPath: "/protos"
+        - name: config-volume
+          mountPath: "/config"
+      volumes:
+      - name: proto-files
+        configMap:
+          name: proto-files
+      - name: config-volume
+        configMap:
+          name: ghz-config
+  backoffLimit: 4
+EOF
+```
+
+To run the script: 
 
 ```bash
-.performance_test/model_infer-ghz.sh $MODEL_NAME $CONTENT_LENGTH $CONCURRENCY $RPM
+./performance_test/model_infer-ghz.sh $MODEL_NAME $CONTENT_LENGTH $CONCURRENCY $RPS $LOAD_SCHEDULE $TIMEOUT $MAX_DURATION $SCALING_METRIC $SCALING_TARGET
 ```
 Example result: 
 ```
