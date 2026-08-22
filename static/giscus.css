@@ -124,6 +124,10 @@ main {
 /* ---------- type ---------- */
 
 main {
+  /* giscus colours its text with utility classes bound to the Primer vars,
+     so `main` itself is left at the browser default black. Anything not
+     wrapped in one of those classes inherits from here. */
+  color: var(--ink);
   font-family: var(--sans);
   font-size: 15px;
 }
