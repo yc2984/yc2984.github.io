@@ -104,6 +104,17 @@ app opens a discussion in the **Announcements** category keyed on the page's
 pathname; the widget is an iframe reading and writing that discussion through
 the GitHub API. Commenting needs a GitHub account.
 
+Two things have to be true on the GitHub side before any of this renders:
+Discussions enabled on the repo, and the [giscus app](https://github.com/apps/giscus)
+installed and granted access to it. The app is the part that is easy to miss,
+because everything looks configured without it and the widget just reports
+`giscus is not installed on this repository`. You can check from the command
+line: anything other than that message means the app is on.
+
+```bash
+curl -s "https://giscus.app/api/discussions?repo=yc2984%2Fyc2984.github.io&category=Announcements&number=0&strict=false&first=1"
+```
+
 Configured in [`hugo.toml`](hugo.toml) under `[params.giscus]`. The two IDs
 there are GraphQL node IDs, not the names sitting next to them:
 
