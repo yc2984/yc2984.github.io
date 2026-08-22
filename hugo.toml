@@ -11,6 +11,8 @@ summaryLength = 30
   pagerSize = 12
 
 [params]
+  # the order the filter chips appear in; anything not listed goes last, A-Z
+  label_order = ['Tech', 'Data', 'AI', 'Thoughts', 'Music', 'Art & Science']
   description = "Writing about tech, data and AI — what I built, what broke, and what it cost."
   # shown in the top-right of the chrome rail
   [[params.links]]
@@ -48,4 +50,7 @@ summaryLength = 30
     ordered = false
 
 [taxonomies]
+  # top-level filter shown as chips on the home page
+  label = 'labels'
+  # finer-grained, listed at the foot of a post
   tag = 'tags'

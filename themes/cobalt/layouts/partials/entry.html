@@ -1,6 +1,6 @@
 {{- /* One row in the index. Expects a dict: page + no. */ -}}
 {{- $p := .page -}}
-<a class="entry" href="{{ $p.RelPermalink }}">
+<a class="entry" href="{{ $p.RelPermalink }}" data-labels="{{ delimit ($p.Params.labels | default slice) "|" }}">
   <span class="entry__no">{{ printf "%02d" .no }}</span>
   <span>
     <h2 class="entry__title">{{ with $p.Params.title_html }}{{ . | safeHTML }}{{ else }}{{ $p.Title }}{{ end }}</h2>

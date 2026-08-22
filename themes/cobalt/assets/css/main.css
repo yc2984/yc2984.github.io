@@ -167,6 +167,47 @@ a:hover { color: var(--ink-soft); }
 }
 .ornament svg { display: block; width: 100%; height: 100%; }
 
+/* ---------- label filter ---------- */
+
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 72px;
+  position: relative;
+  z-index: 2;
+}
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 9px;
+  border: 1px solid var(--ink-faint);
+  padding: 8px 13px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color 90ms linear, border-color 90ms linear, background-color 90ms linear;
+}
+.chip:hover { color: var(--ink); border-color: var(--ink); }
+.chip__n {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink-pale);
+  font-variant-numeric: tabular-nums;
+}
+.chip.is-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.chip.is-on:hover { color: var(--paper); }
+.chip.is-on .chip__n { color: rgba(240, 235, 222, 0.65); }
+
+/* the filter sits between the masthead and the index, so the index rule tightens up */
+.filter + .index { margin-top: 30px; }
+
 /* ---------- index of posts ---------- */
 
 .index {

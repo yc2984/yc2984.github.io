@@ -1,0 +1,71 @@
+{{- /*
+  Label chips above the index. Each chip is a real link to its label page, so it
+  works with JavaScript off; the script below upgrades it to instant in-page
+  filtering. Order comes from params.label_order.
+*/ -}}
+{{- $tax := index site.Taxonomies "labels" -}}
+{{- if $tax -}}
+<nav class="filter" aria-label="Filter by label" data-filter>
+  <a class="chip is-on" href="{{ "/" | relURL }}" data-chip="all" aria-current="page">
+    <span>All</span><span class="chip__n">{{ len (where site.RegularPages "Section" "posts") }}</span>
+  </a>
+  {{- range $label := site.Params.label_order }}
+    {{- with index $tax ($label | urlize) }}
+  <a class="chip" href="{{ .Page.RelPermalink }}" data-chip="{{ $label }}">
+    <span>{{ $label }}</span><span class="chip__n">{{ .Count }}</span>
+  </a>
+    {{- end }}
+  {{- end }}
+  {{- range $name, $t := $tax }}
+    {{- $known := false }}
+    {{- range site.Params.label_order }}{{ if eq ($name) (. | urlize) }}{{ $known = true }}{{ end }}{{ end }}
+    {{- if not $known }}
+  <a class="chip" href="{{ $t.Page.RelPermalink }}" data-chip="{{ $t.Page.Title }}">
+    <span>{{ $t.Page.Title }}</span><span class="chip__n">{{ $t.Count }}</span>
+  </a>
+    {{- end }}
+  {{- end }}
+</nav>
+
+<script>
+(function () {
+  var bar = document.querySelector("[data-filter]");
+  if (!bar) return;
+  var chips = bar.querySelectorAll("[data-chip]");
+  var rows = document.querySelectorAll(".index .entry");
+
+  function apply(label, push) {
+    chips.forEach(function (c) {
+      var on = c.dataset.chip === label;
+      c.classList.toggle("is-on", on);
+      if (on) { c.setAttribute("aria-current", "page"); } else { c.removeAttribute("aria-current"); }
+    });
+    var shown = 0;
+    rows.forEach(function (r) {
+      var has = label === "all" ||
+        (r.dataset.labels || "").split("|").indexOf(label) !== -1;
+      r.hidden = !has;
+      if (has) shown++;
+    });
+    bar.setAttribute("data-shown", shown);
+    if (push) {
+      var url = label === "all" ? location.pathname : location.pathname + "#" + encodeURIComponent(label);
+      history.replaceState(null, "", url);
+    }
+  }
+
+  chips.forEach(function (c) {
+    c.addEventListener("click", function (e) {
+      e.preventDefault();
+      apply(c.dataset.chip, true);
+    });
+  });
+
+  var initial = decodeURIComponent((location.hash || "").slice(1));
+  if (initial) {
+    var match = Array.prototype.find.call(chips, function (c) { return c.dataset.chip === initial; });
+    if (match) apply(initial, false);
+  }
+})();
+</script>
+{{- end -}}

@@ -3,33 +3,32 @@ title = 'Serving models on Kubernetes with KServe'
 title_html = 'Serving models on Kubernetes with <em>KServe</em>'
 date = 2024-04-02T10:00:00+02:00
 draft = false
-summary = "Scale-to-zero sounds free until you meet the cold start. What KServe actually buys you, what it quietly costs, and the numbers from a real load test."
+summary = "Scale-to-zero sounds free until you meet the cold start. What KServe actually buys you, what it quietly costs, and why we turned the headline feature off in the end."
+labels = ['Tech', 'AI']
 tags = ['kubernetes', 'kserve', 'knative', 'ml-infrastructure', 'model-serving']
 categories = ['ML infrastructure']
 aliases = ['/posts/kserve-end-to-end-guild/']
 toc = true
 +++
 
-If you serve more than one model, you eventually hit the same fork in the road.
-Bundle every model into one service and they share a fate: one lifecycle, one
-memory limit, one autoscaling policy. The model having the worst afternoon
-decides everyone's afternoon, and you can't give the expensive model more room
-without giving it to all of them. Split them into a service per model and the
-isolation problem goes away — replaced by a bill that scales linearly with the
-number of models, most of which are idle most of the time.
+Two and a half thousand models in each cloud runtime. That number is what makes
+this decision interesting, because past a certain scale the usual fork in the
+road stops being a trade-off and starts being arithmetic. Bundle everything into
+one service and every model shares a fate — one lifecycle, one memory limit, one
+autoscaling policy — so whichever model is having the worst afternoon decides
+everyone's afternoon. Split them into a service per model and the isolation
+problem disappears, replaced by a bill for 2,500 deployments, nearly all of them
+idle nearly all of the time.
 
-[TODO: two or three sentences on your actual situation — how many models, what
-the old setup was, what specifically hurt. This is the part readers will
-recognise themselves in, and it's the one part I can't write for you.]
-
-[KServe](https://kserve.dev/) claims you don't have to choose. Each model
-becomes its own `InferenceService` with its own autoscaling policy, and when
-nothing calls it, it scales to **zero** — no pods, no cost. Isolation with
-per-model economics.
+[KServe](https://kserve.dev/) claims you don't have to choose. Each model becomes
+its own `InferenceService` with its own autoscaling policy, and when nothing
+calls it, it scales to **zero** — no pods, no cost. Isolation with per-model
+economics.
 
 That claim is mostly true. This post is about the "mostly": what the stack is
-actually made of, how to stand it up without the three mistakes I made, and what
-happened when I pointed real load at it.
+actually made of, how to stand it up without the three mistakes I made, what
+happened when I pointed real load at it, and why we ended up not using the
+feature we came for.
 
 The short version, if you only read one line:
 
@@ -370,9 +369,8 @@ and hides exactly the behaviour I wanted to see:
 }
 ```
 
-The full driver script — which deploys the model at a given `scaleMetric` /
-`scaleTarget`, waits for it, then runs the Job — is in the repo:
-[`performance_test/model_infer-ghz.sh`](https://github.com/yc2984/kserve-poc).
+The full driver script deploys the model at a given `scaleMetric` /
+`scaleTarget`, waits for it to become ready, then runs the Job.
 
 ### The results
 
@@ -390,13 +388,87 @@ Stepping to 20 rps against a model with `minReplicas: 0`:
 | Fastest | 110 ms |
 | Successful (`OK`) | 1,030 (**57%**) |
 
-And the error distribution, which is the actual story:
+{{< diagram caption="Fig. 2 — response time of the 1,030 requests that succeeded. One series, so one colour and no legend; only the peak carries a number." >}}
+<svg viewBox="0 0 700 292" role="img" aria-label="Histogram of successful response times. The tallest bucket, 1.50 to 1.78 seconds, holds 453 requests. Median 1.70 seconds, 99th percentile 2.70 seconds.">
+  <g stroke="currentColor" stroke-width="1" opacity="0.2">
+    <line x1="48" y1="20" x2="700" y2="20"/>
+    <line x1="48" y1="87.5" x2="700" y2="87.5"/>
+    <line x1="48" y1="154" x2="700" y2="154"/>
+  </g>
+  <line x1="48" y1="220" x2="700" y2="220" stroke="currentColor" stroke-width="1"/>
 
-```
-[InvalidArgument]   739   "Model my-model with version is not ready yet"
-[DeadlineExceeded]   19
-[Unavailable]        21
-```
+  <g font-family="DM Mono, monospace" font-size="9.5" fill="currentColor" opacity="0.7" text-anchor="end" style="font-variant-numeric: tabular-nums">
+    <text x="38" y="23">450</text><text x="38" y="91">300</text>
+    <text x="38" y="157">150</text><text x="38" y="223">0</text>
+  </g>
+  <text x="48" y="11" font-family="DM Mono, monospace" font-size="9" letter-spacing="1.5" fill="currentColor" opacity="0.7">REQUESTS</text>
+
+  <g fill="currentColor">
+    <rect x="61.6" y="218.0" width="32" height="2.0" rx="1.0"/>
+    <rect x="120.9" y="217.4" width="32" height="2.6" rx="1.3"/>
+    <rect x="180.2" y="213.4" width="32" height="6.6" rx="3.3"/>
+    <rect x="239.5" y="215.1" width="32" height="4.9" rx="2.4"/>
+    <rect x="298.8" y="209.4" width="32" height="10.6" rx="4.0"/>
+    <rect x="358.1" y="154.7" width="32" height="65.3" rx="4.0"/>
+    <rect x="417.4" y="20.0" width="32" height="200.0" rx="4.0"/>
+    <rect x="476.7" y="101.7" width="32" height="118.3" rx="4.0"/>
+    <rect x="536.0" y="192.6" width="32" height="27.4" rx="4.0"/>
+    <rect x="595.3" y="209.0" width="32" height="11.0" rx="4.0"/>
+    <rect x="654.6" y="212.5" width="32" height="7.5" rx="3.8"/>
+  </g>
+
+  <text x="433.4" y="12" font-family="Hanken Grotesk, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">453</text>
+
+  <g stroke="currentColor" stroke-width="1" opacity="0.5">
+    <line x1="445.4" y1="20" x2="445.4" y2="226"/>
+    <line x1="658.1" y1="20" x2="658.1" y2="226"/>
+  </g>
+
+  <g font-family="DM Mono, monospace" font-size="9.5" fill="currentColor" opacity="0.7" text-anchor="middle" style="font-variant-numeric: tabular-nums">
+      <text x="77.7" y="240">0.11</text>
+      <text x="196.2" y="240">0.67</text>
+      <text x="314.8" y="240">1.23</text>
+      <text x="433.4" y="240">1.78</text>
+      <text x="552.0" y="240">2.34</text>
+      <text x="670.6" y="240">2.90</text>
+  </g>
+  <g font-family="DM Mono, monospace" font-size="9" letter-spacing="1" fill="currentColor" text-anchor="middle">
+    <text x="445.4" y="258">P50 1.70s</text>
+    <text x="658.1" y="258">P99 2.70s</text>
+  </g>
+  <text x="374" y="280" font-family="DM Mono, monospace" font-size="9" letter-spacing="1.5" fill="currentColor" opacity="0.7" text-anchor="middle">RESPONSE TIME (SECONDS)</text>
+</svg>
+{{< /diagram >}}
+
+And the outcome breakdown, which is the actual story:
+
+{{< diagram caption="Fig. 3 — outcome by gRPC status code. The two thin segments are too narrow to label, so the table below carries them." >}}
+<svg viewBox="0 0 700 96" role="img" aria-label="Of 1809 requests: 1030 OK, 739 InvalidArgument meaning the model was not ready, 21 Unavailable, 19 DeadlineExceeded.">
+  <rect x="0"     y="6" width="395.1" height="44" fill="#141C93"/>
+  <rect x="397.1" y="6" width="283.5" height="44" fill="#1F2BE0"/>
+  <rect x="682.6" y="6" width="8.1"   height="44" fill="#5560E5"/>
+  <rect x="692.7" y="6" width="7.3"   height="44" fill="#9AA1EE"/>
+
+  <g font-family="DM Mono, monospace" font-size="10" letter-spacing="1" fill="#F0EBDE">
+    <text x="14"  y="32">OK &#183; 1,030</text>
+    <text x="411" y="32">NOT READY &#183; 739</text>
+  </g>
+
+  <g font-family="DM Mono, monospace" font-size="9.5" fill="currentColor">
+    <rect x="0"   y="72" width="9" height="9" fill="#141C93"/><text x="14"  y="80">OK</text>
+    <rect x="46"  y="72" width="9" height="9" fill="#1F2BE0"/><text x="60"  y="80">InvalidArgument</text>
+    <rect x="176" y="72" width="9" height="9" fill="#5560E5"/><text x="190" y="80">Unavailable</text>
+    <rect x="280" y="72" width="9" height="9" fill="#9AA1EE"/><text x="294" y="80">DeadlineExceeded</text>
+  </g>
+</svg>
+{{< /diagram >}}
+
+| Status | Requests | Share |
+|--------|---------:|------:|
+| `OK` | 1,030 | 56.9% |
+| `InvalidArgument` — model not ready | 739 | 40.9% |
+| `Unavailable` | 21 | 1.2% |
+| `DeadlineExceeded` | 19 | 1.1% |
 
 **Forty-three percent of requests failed, and almost all of them for one
 reason: the model wasn't loaded yet.** The autoscaler did its job — it saw
@@ -446,25 +518,27 @@ In rough order of leverage:
 
 ## So: worth it?
 
-For sparse, bursty traffic across many models — yes, clearly. Per-model
-isolation and a bill that tracks actual use are hard to get any other way, and
-the operational cost is a one-time investment rather than a recurring one.
+Here is the honest ending: we kept KServe and turned off the feature we came for.
 
-For a handful of models with steady traffic, no. You'd be operating Knative,
-Istio and cert-manager to solve a problem a Deployment and an HPA already
-solve, and paying a latency floor for the privilege.
+`minReplicas: 0` is not set anywhere in production. The deployment runs a
+constant four pods, always warm, and the cold-start problem is solved the
+expensive way — by never having one.
 
-The thing I'd want to know before starting, and didn't: **cold starts are not
-an implementation detail you tune away later — they're a product decision you
-make up front.** Either your callers tolerate a multi-second first request, or
-you keep something warm and give back part of the saving. KServe makes that
-trade-off cheap to *express*. It doesn't make it go away.
+Which sounds like a failed experiment, and isn't. The section above *is* the
+result. Forty-three percent of requests failing on a cold start is not a number
+you tune away next sprint; it's an answer. Finding it in a load test cost an
+afternoon. Finding it in production, in front of callers who had been told the
+model was available, would have cost considerably more — and we would have found
+it eventually either way, because scale-to-zero doesn't degrade gracefully. It
+works perfectly right up until traffic arrives at an empty deployment.
 
-[TODO: which way did you actually go in the end — scale to zero, minReplicas: 1,
-or the grace-period middle ground? Ending on your real decision is worth more
-than any of the above.]
+So the value wasn't the saving. It was learning the price of the saving before
+committing to it, and then deciding not to pay.
 
----
+The thing I'd want to know before starting, and didn't: **cold starts are not an
+implementation detail you tune away later — they're a product decision you make
+up front.** Either your callers tolerate a multi-second first request, or you
+keep something warm and hand back part of the saving. KServe makes that trade-off
+cheap to *express*, and cheap to measure. It does not make it go away.
 
-*Code, model configs and the load-test harness:
-[github.com/yc2984/kserve-poc](https://github.com/yc2984/kserve-poc).*
+We made ours. It just wasn't the one the feature list suggested.

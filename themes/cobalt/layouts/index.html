@@ -7,6 +7,8 @@
 
   {{ with .Content }}<div class="prose masthead__intro">{{ . }}</div>{{ end }}
 
+  {{ partial "filter.html" . }}
+
   <div class="index">
     {{ $posts := where site.RegularPages "Section" "posts" }}
     {{ range $i, $p := first 12 $posts }}

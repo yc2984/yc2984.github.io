@@ -29,9 +29,22 @@ The archetype scaffolds the front matter this theme uses:
 | `title`      | The real title. Used in `<title>`, RSS and OG tags — keep it plain. |
 | `title_html` | Optional. Same title with an italic accent (`with <em>KServe</em>`), used for display only. |
 | `summary`    | The standfirst under the title, the line in the index, and the RSS description. |
-| `tags`       | Lowercase, hyphenated. They render as mono chips. |
+| `labels`     | The top-level filter chips on the home page. Pick from `params.label_order` in `hugo.toml`: Tech, Data, AI, Thoughts, Music, Art & Science. One or two per post. |
+| `tags`       | Finer-grained, lowercase, hyphenated. Listed at the foot of a post. |
 | `toc`        | `true` (default) shows the sticky contents rail. Set `false` for short posts. |
 | `aliases`    | Old URLs to redirect from, if you rename a post. |
+
+## Labels and the filter
+
+`labels` is the coarse cut — the chips above the index. `tags` are the fine cut,
+at the foot of a post. Add a label to `params.label_order` in `hugo.toml` to
+control where its chip appears; the order there is the order on the page.
+
+A chip only appears once at least one post carries that label, so the row never
+shows a filter that leads nowhere. Each chip is a real link to `/labels/<name>/`
+and works with JavaScript off; the inline script in
+`layouts/partials/filter.html` upgrades it to instant in-page filtering and
+writes the label to the URL hash, so a filtered view can be shared.
 
 ## The figure vocabulary
 
@@ -91,3 +104,17 @@ paragraph rather than one short sentence.
 The theme is committed to light. There is no dark mode — adding one means
 choosing a second ground colour, which is a design decision rather than a CSS
 toggle.
+
+
+## Not done yet
+
+- **Comments.** Nothing is wired up. The realistic options, cheapest first:
+  *Giscus* (comments as GitHub Discussions — one script tag, commenters need a
+  GitHub account, free, no server); *Cusdis* or *Isso* (self-hosted, anyone can
+  comment, needs somewhere to run); *Mastodon reply-thread embedding* (you post
+  the link, the thread becomes the comments). Giscus is about half an hour of
+  work including styling it to the two-ink palette; anything self-hosted is a
+  service to run and moderate forever.
+- **Dark mode.** Deliberately absent — it needs a second ground colour chosen,
+  not a CSS toggle.
+- **OG images.** No per-post social card yet.
