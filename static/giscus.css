@@ -132,7 +132,6 @@ main {
   font-size: 15px;
 }
 
-main .markdown-body,
 main .gsc-comment-content {
   font-family: var(--sans);
   font-size: 15px;
@@ -142,8 +141,8 @@ main .gsc-comment-content {
 main code,
 main pre,
 main tt,
-main .markdown-body code,
-main .markdown-body pre {
+main .gsc-comment-content code,
+main .gsc-comment-content pre {
   font-family: var(--mono);
   font-size: 13px;
 }
@@ -181,8 +180,8 @@ main .gsc-left-header {
    commenter's h1 lands at 30px and out-shouts the post's own section
    headings, which are mono small-caps at 13px. Pull them back into the
    site's voice and keep the article the loudest thing on the page. */
-main .markdown-body h1,
-main .markdown-body h2 {
+main .gsc-comment-content h1,
+main .gsc-comment-content h2 {
   font-family: var(--mono);
   font-weight: 500;
   font-size: 12.5px;
@@ -194,10 +193,10 @@ main .markdown-body h2 {
   padding-bottom: 0;
 }
 
-main .markdown-body h3,
-main .markdown-body h4,
-main .markdown-body h5,
-main .markdown-body h6 {
+main .gsc-comment-content h3,
+main .gsc-comment-content h4,
+main .gsc-comment-content h5,
+main .gsc-comment-content h6 {
   font-family: var(--sans);
   font-weight: 600;
   font-size: 15px;
