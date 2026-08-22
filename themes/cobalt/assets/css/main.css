@@ -666,6 +666,37 @@ figcaption {
   text-transform: uppercase;
 }
 
+/* ---------- comments (giscus) ---------- */
+
+/* The widget itself is an iframe styled by static/giscus.css. All this
+   does is give it the same ruled-section furniture as .pager above it,
+   and hold it to the body measure so a thread doesn't run full-bleed. */
+.comments {
+  margin-top: 52px;
+  padding-top: 13px;
+  border-top: 1px solid var(--ink);
+  max-width: var(--measure);
+}
+
+.comments__label {
+  margin: 0 0 20px;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.comments .giscus,
+.comments .giscus-frame { width: 100%; }
+.comments .giscus-frame { border: 0; color-scheme: light; }
+
+.comments__fallback {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
 /* ---------- responsive ---------- */
 
 @media (max-width: 1000px) {
@@ -707,7 +738,7 @@ figcaption {
 
 @media print {
   body { background-image: none; background-color: #fff; color: #000; }
-  .rail, .foot, .toc, .ornament, .pager { display: none; }
+  .rail, .foot, .toc, .ornament, .pager, .comments { display: none; }
   .article__body { display: block; border: 0; }
   .prose { max-width: none; }
   a { color: #000; }
