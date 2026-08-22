@@ -32,6 +32,7 @@ The archetype scaffolds the front matter this theme uses:
 | `labels`     | The top-level filter chips on the home page. Pick from `params.label_order` in `hugo.toml`: Tech, Data, AI, Thoughts, Music, Art & Science. One or two per post. |
 | `tags`       | Finer-grained, lowercase, hyphenated. Listed at the foot of a post. |
 | `toc`        | `true` (default) shows the sticky contents rail. Set `false` for short posts. |
+| `comments`   | `true` (default under `/posts/`) shows the giscus thread. Set `false` to close one. |
 | `aliases`    | Old URLs to redirect from, if you rename a post. |
 
 ## Labels and the filter
@@ -95,6 +96,56 @@ Charts are inline SVG too, drawn by hand, using the tokens in
 
 Every chart should have a table below it carrying the same numbers.
 
+## Comments
+
+Comments are GitHub Discussions, drawn by [giscus](https://giscus.app). There is
+no server and no database. The first time someone comments on a page the giscus
+app opens a discussion in the **Announcements** category keyed on the page's
+pathname; the widget is an iframe reading and writing that discussion through
+the GitHub API. Commenting needs a GitHub account.
+
+Configured in [`hugo.toml`](hugo.toml) under `[params.giscus]`. The two IDs
+there are GraphQL node IDs, not the names sitting next to them:
+
+```bash
+gh api repos/yc2984/yc2984.github.io --jq .node_id
+```
+
+Two choices worth keeping: **Announcements**, because only maintainers can open
+a thread in it, so the category cannot fill up with discussions that match no
+page; and `mapping = pathname` rather than `title`, because titles here carry
+italic markup in `title_html` and posts get renamed, while pathnames hold still.
+
+On by default everywhere under `/posts/`, off everywhere else — so `/about/`
+stays quiet without being told to. `comments = false` in a post closes its
+thread; `comments = true` on a page outside `/posts/` opens one. Delete the
+`[params.giscus]` table and comments vanish site-wide, which is also what makes
+a fork of this theme render nothing.
+
+### Styling it
+
+Giscus ships a fixed set of themes and none of them are cream-and-cobalt, so
+`data-theme` points at [`static/giscus.css`](static/giscus.css) instead. In
+custom mode giscus loads that file and nothing else, so it opens by importing
+giscus's own `light.css` for the couple of hundred Primer variables that don't
+need changing, then remaps the ones that show: ground to the cream, text and
+rules to the cobalt, the primary button off GitHub green and onto the ink, and
+code to tonal cobalt with the rust and the jade doing the two distinctions that
+genuinely need separating. Avatars are greyed and squared so a colour photo
+can't break the two inks, and radii are flattened because nothing else on this
+site has a rounded corner.
+
+Two things that will catch you out:
+
+- The iframe is a separate document. Nothing in
+  [`themes/cobalt/assets/css/main.css`](themes/cobalt/assets/css/main.css)
+  reaches it, so the tokens are restated at the top of `static/giscus.css` and
+  have to be kept in step by hand.
+- The theme is fetched from `https://yc2984.github.io/giscus.css`, so **it does
+  not apply on localhost**: giscus cannot reach a URL on your machine. Under
+  `hugo server` the widget renders in giscus's default light theme. The styling
+  only shows up on the deployed site.
+
 ## Layout notes
 
 Body text holds a 33em measure; figures, code blocks and tables are allowed to
@@ -108,13 +159,6 @@ toggle.
 
 ## Not done yet
 
-- **Comments.** Nothing is wired up. The realistic options, cheapest first:
-  *Giscus* (comments as GitHub Discussions — one script tag, commenters need a
-  GitHub account, free, no server); *Cusdis* or *Isso* (self-hosted, anyone can
-  comment, needs somewhere to run); *Mastodon reply-thread embedding* (you post
-  the link, the thread becomes the comments). Giscus is about half an hour of
-  work including styling it to the two-ink palette; anything self-hosted is a
-  service to run and moderate forever.
 - **Dark mode.** Deliberately absent — it needs a second ground colour chosen,
   not a CSS toggle.
 - **OG images.** No per-post social card yet.

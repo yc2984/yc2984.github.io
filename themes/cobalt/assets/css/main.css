@@ -128,13 +128,13 @@ a:hover { color: var(--ink-soft); }
 /* The home page is not a poster of my name. Keep it a wordmark and let the
    sentence underneath do the talking. */
 .masthead--home {
-  padding-top: 72px;
+  padding-top: 56px;
   max-width: none;
 }
 .masthead--home h1 {
-  font-size: clamp(28px, 3.0vw, 38px);
-  line-height: 1.04;
-  letter-spacing: -0.008em;
+  font-size: clamp(21px, 2.1vw, 26px);
+  line-height: 1.1;
+  letter-spacing: -0.004em;
 }
 
 .masthead__kicker {
@@ -170,11 +170,11 @@ a:hover { color: var(--ink-soft); }
 /* the scanline ornament, home page only */
 .ornament {
   position: absolute;
-  top: 92px;
+  top: 72px;
   right: var(--pad);
-  width: 148px;
-  height: 238px;
-  opacity: 0.5;
+  width: 118px;
+  height: 190px;
+  opacity: 0.45;
   pointer-events: none;
   z-index: 0;
 }
@@ -186,7 +186,7 @@ a:hover { color: var(--ink-soft); }
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 52px;
+  margin-top: 40px;
   position: relative;
   z-index: 2;
 }
@@ -623,14 +623,14 @@ figcaption {
 
 /* homepage intro, when there is one */
 .masthead__intro {
-  margin-top: 20px;
-  max-width: 34em;
+  margin-top: 12px;
+  max-width: 40em;
 }
 .masthead__intro > p {
   margin: 0;
   font-family: var(--serif);
-  font-size: 21px;
-  line-height: 1.56;
+  font-size: 17.5px;
+  line-height: 1.55;
   color: var(--ink-mid);
 }
 
