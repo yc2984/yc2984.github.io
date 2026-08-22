@@ -177,6 +177,36 @@ main .gsc-left-header {
   font-size: 11.5px;
 }
 
+/* Headings inside a comment. GitHub renders these at document scale, so a
+   commenter's h1 lands at 30px and out-shouts the post's own section
+   headings, which are mono small-caps at 13px. Pull them back into the
+   site's voice and keep the article the loudest thing on the page. */
+main .markdown-body h1,
+main .markdown-body h2 {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 12.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 0;
+  margin: 26px 0 10px;
+  padding-bottom: 0;
+}
+
+main .markdown-body h3,
+main .markdown-body h4,
+main .markdown-body h5,
+main .markdown-body h6 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  margin: 20px 0 6px;
+}
+
 /* ---------- shape ---------- */
 
 /* The site has no border-radius anywhere; giscus is Tailwind-built, so
