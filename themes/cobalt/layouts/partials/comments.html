@@ -1,0 +1,44 @@
+{{- /* Comments, as GitHub Discussions, via giscus.
+
+     On by default for posts, off everywhere else. `comments = false` in a
+     post's front matter turns it off; `comments = true` on a page outside
+     /posts/ turns it on. Renders nothing at all unless [params.giscus] in
+     hugo.toml carries the repo and both node IDs, so a fork stays quiet.  */ -}}
+
+{{- $on := eq .Section "posts" -}}
+{{- if isset .Params "comments" }}{{ $on = .Params.comments }}{{ end -}}
+
+{{- if $on -}}
+  {{- with site.Params.giscus -}}
+    {{- if and .repo .repoID .category .categoryID -}}
+<section class="comments" id="comments">
+  <h2 class="comments__label">Comments</h2>
+
+  <script src="https://giscus.app/client.js"
+          data-repo="{{ .repo }}"
+          data-repo-id="{{ .repoID }}"
+          data-category="{{ .category }}"
+          data-category-id="{{ .categoryID }}"
+          data-mapping="pathname"
+          data-strict="1"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="{{ "giscus.css" | absURL }}"
+          data-lang="en"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async>
+  </script>
+
+  <noscript>
+    <p class="comments__fallback">
+      Comments live in
+      <a href="https://github.com/{{ .repo }}/discussions/categories/{{ .category | urlize }}">GitHub&nbsp;Discussions</a>
+      and need JavaScript to appear here.
+    </p>
+  </noscript>
+</section>
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

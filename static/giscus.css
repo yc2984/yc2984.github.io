@@ -1,0 +1,236 @@
+/* ============================================================
+   Cobalt Grid — giscus theme
+   Served at https://yc2984.github.io/giscus.css and passed to the
+   widget as data-theme. Styles the *inside* of the giscus iframe,
+   which is a separate document: nothing from the site's own CSS
+   reaches here, so the tokens are restated rather than imported.
+
+   Keep in step with themes/cobalt/assets/css/main.css.
+   ============================================================ */
+
+/* Primer's variable set, which giscus is built on. Everything below
+   overrides a subset of it; anything not named here keeps GitHub's
+   light value, which is what we want for the parts nobody sees. */
+@import url("https://giscus.app/themes/light.css");
+
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=DM+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;1,400&display=swap");
+
+:root {
+  --paper:      #F0EBDE;
+  --paper-2:    #E6E0CE;
+  --ink:        #1F2BE0;
+  --ink-mid:    #2A34C4;
+  --ink-soft:   #5560E5;
+  --ink-dim:    #6A71DE;
+  --ink-pale:   #8D93E8;
+  --ink-faint:  rgba(31, 43, 224, 0.18);
+  --ink-wash:   rgba(31, 43, 224, 0.09);
+
+  --rust: #9D4616;
+  --jade: #0E9977;
+
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans:  "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono:  "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ---------- Primer tokens, remapped to the two inks ---------- */
+
+main {
+  /* ground */
+  --color-canvas-default:  var(--paper);
+  --color-canvas-overlay:  var(--paper);
+  --color-canvas-subtle:   var(--paper-2);
+  --color-canvas-inset:    var(--paper-2);
+
+  /* text */
+  --color-fg-default: var(--ink);
+  --color-fg-muted:   var(--ink-mid);
+  --color-fg-subtle:  var(--ink-soft);
+
+  /* rules */
+  --color-border-default: var(--ink-faint);
+  --color-border-muted:   var(--ink-wash);
+  --color-neutral-muted:  var(--ink-wash);
+  --color-primer-shadow-inset: none;
+
+  /* links and the focus accent */
+  --color-accent-fg:       var(--ink);
+  --color-accent-emphasis: var(--ink);
+  --color-accent-muted:    var(--ink-faint);
+  --color-accent-subtle:   var(--ink-wash);
+
+  /* secondary buttons: outlined, not filled */
+  --color-btn-text:          var(--ink);
+  --color-btn-bg:            transparent;
+  --color-btn-border:        var(--ink-faint);
+  --color-btn-shadow:        none;
+  --color-btn-inset-shadow:  none;
+  --color-btn-hover-bg:      var(--ink-wash);
+  --color-btn-hover-border:  var(--ink);
+  --color-btn-active-bg:     var(--ink-faint);
+  --color-btn-active-border: var(--ink);
+  --color-btn-selected-bg:   var(--ink-faint);
+
+  /* the primary button is GitHub green out of the box — make it the ink */
+  --color-btn-primary-text:            var(--paper);
+  --color-btn-primary-bg:              var(--ink);
+  --color-btn-primary-border:          var(--ink);
+  --color-btn-primary-shadow:          none;
+  --color-btn-primary-inset-shadow:    none;
+  --color-btn-primary-hover-bg:        var(--ink-mid);
+  --color-btn-primary-hover-border:    var(--ink-mid);
+  --color-btn-primary-selected-bg:     var(--ink-mid);
+  --color-btn-primary-selected-shadow: none;
+  --color-btn-primary-disabled-text:   var(--paper);
+  --color-btn-primary-disabled-bg:     var(--ink-pale);
+  --color-btn-primary-disabled-border: var(--ink-pale);
+
+  --color-action-list-item-default-hover-bg: var(--ink-wash);
+  --color-segmented-control-bg:               var(--paper-2);
+  --color-segmented-control-button-bg:        var(--paper);
+  --color-segmented-control-button-selected-border: var(--ink);
+
+  /* status: the two sanctioned extensions, so it stays a two-ink system
+     with a rust and a jade rather than sprouting a fourth hue */
+  --color-success-fg:    var(--jade);
+  --color-danger-fg:     var(--rust);
+  --color-danger-muted:  rgba(157, 70, 22, 0.35);
+  --color-danger-subtle: rgba(157, 70, 22, 0.08);
+  --color-attention-fg:     var(--rust);
+  --color-attention-muted:  rgba(157, 70, 22, 0.35);
+  --color-attention-subtle: rgba(157, 70, 22, 0.08);
+
+  --color-social-reaction-bg-hover:         var(--ink-wash);
+  --color-social-reaction-bg-reacted-hover: var(--ink-faint);
+
+  /* code in a comment: tonal cobalt, with the rust and jade for the
+     two distinctions that actually need separating */
+  --color-prettylights-syntax-comment:        var(--ink-pale);
+  --color-prettylights-syntax-constant:       var(--ink-mid);
+  --color-prettylights-syntax-entity:         var(--ink-soft);
+  --color-prettylights-syntax-entity-tag:     var(--jade);
+  --color-prettylights-syntax-keyword:        var(--rust);
+  --color-prettylights-syntax-string:         var(--jade);
+  --color-prettylights-syntax-string-regexp:  var(--jade);
+  --color-prettylights-syntax-variable:       var(--ink-mid);
+  --color-prettylights-syntax-storage-modifier-import: var(--ink);
+  --color-prettylights-syntax-markup-heading: var(--ink);
+  --color-prettylights-syntax-markup-list:    var(--ink-soft);
+  --color-prettylights-syntax-markup-bold:    var(--ink);
+  --color-prettylights-syntax-markup-italic:  var(--ink);
+}
+
+/* ---------- type ---------- */
+
+main {
+  font-family: var(--sans);
+  font-size: 15px;
+}
+
+main .markdown-body,
+main .gsc-comment-content {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.62;
+}
+
+main code,
+main pre,
+main tt,
+main .markdown-body code,
+main .markdown-body pre {
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+/* chrome — author, timestamps, counts, tabs, pagination — is mono
+   small-caps, the same voice as the rest of the site's furniture */
+main .gsc-comment-author,
+main .gsc-comment-author-avatar,
+main .gsc-comment-edited,
+main .gsc-reactions-count,
+main .gsc-tab-button,
+main .gsc-pagination,
+main .gsc-pagination-count,
+main .gsc-header,
+main .gsc-left-header,
+main .gsc-right-header,
+main .gsc-direct-reply-button,
+main .gsc-replies-count,
+main time,
+main relative-time {
+  font-family: var(--mono);
+  letter-spacing: 0.06em;
+}
+
+main .gsc-comment-author-avatar,
+main .gsc-header,
+main .gsc-left-header {
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 11.5px;
+}
+
+/* ---------- shape ---------- */
+
+/* The site has no border-radius anywhere; giscus is Tailwind-built, so
+   squaring it means beating utility classes on their own terms. This is
+   a leaf stylesheet in an iframe we own outright, so !important is the
+   cheap correct tool rather than a smell. */
+main,
+main *,
+main *::before,
+main *::after {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* avatars: greyed and squared, so a colour photo can't break the two
+   inks. Not the full duotone — that needs a wrapper we don't control. */
+main .gsc-comment-author-avatar img,
+main img.gsc-avatar,
+main .gsc-reply-author-avatar img {
+  filter: grayscale(1) contrast(1.06);
+  border: 1px solid var(--ink-faint);
+}
+
+/* comment cards read as ruled blocks on the paper, not as raised chips */
+main .gsc-comment > div,
+main .gsc-reply > div {
+  border: 1px solid var(--ink-faint);
+  background: transparent;
+}
+
+main .gsc-comment-header {
+  background: var(--ink-wash);
+  border-bottom: 1px solid var(--ink-faint);
+}
+
+main .gsc-comment-box-textarea,
+main textarea {
+  font-family: var(--sans);
+  background: var(--paper);
+  border-color: var(--ink-faint);
+}
+main .gsc-comment-box-textarea:focus,
+main textarea:focus {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+main a { color: var(--ink); }
+main a:hover { color: var(--ink-soft); }
+
+main .gsc-header,
+main .gsc-timeline > .gsc-comment-box {
+  border-top: 1px solid var(--ink-faint);
+}
+
+/* the "powered by giscus" line and other asides sit back */
+main .gsc-loading-text,
+main .gsc-homepage-bg { color: var(--ink-pale); background: transparent; }
+
+::selection { background: var(--ink); color: var(--paper); }

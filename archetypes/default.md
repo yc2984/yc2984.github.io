@@ -10,6 +10,8 @@ summary = ""
 
 tags = []
 toc = true
+# comments are on for everything under /posts/; set false to close a thread
+comments = true
 +++
 
 Opening paragraph. Make it a real paragraph — it gets the drop cap, so a single

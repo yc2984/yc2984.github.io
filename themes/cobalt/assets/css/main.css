@@ -125,6 +125,18 @@ a:hover { color: var(--ink-soft); }
 }
 .masthead em { font-style: italic; font-weight: 300; }
 
+/* The home page is not a poster of my name. Keep it a wordmark and let the
+   sentence underneath do the talking. */
+.masthead--home {
+  padding-top: 72px;
+  max-width: none;
+}
+.masthead--home h1 {
+  font-size: clamp(28px, 3.0vw, 38px);
+  line-height: 1.04;
+  letter-spacing: -0.008em;
+}
+
 .masthead__kicker {
   font-family: var(--mono);
   font-size: 11px;
@@ -158,10 +170,11 @@ a:hover { color: var(--ink-soft); }
 /* the scanline ornament, home page only */
 .ornament {
   position: absolute;
-  top: 150px;
+  top: 92px;
   right: var(--pad);
-  width: 208px;
-  height: 336px;
+  width: 148px;
+  height: 238px;
+  opacity: 0.5;
   pointer-events: none;
   z-index: 0;
 }
@@ -173,7 +186,7 @@ a:hover { color: var(--ink-soft); }
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 72px;
+  margin-top: 52px;
   position: relative;
   z-index: 2;
 }
@@ -610,17 +623,15 @@ figcaption {
 
 /* homepage intro, when there is one */
 .masthead__intro {
-  margin-top: 34px;
-  max-width: 30em;
+  margin-top: 20px;
+  max-width: 34em;
 }
 .masthead__intro > p {
-  font-family: var(--sans);
-  font-size: 17px;
-  line-height: 1.62;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 21px;
+  line-height: 1.56;
   color: var(--ink-mid);
-}
-.masthead__intro > p:first-of-type::first-letter {
-  float: none; font-size: inherit; line-height: inherit; padding: 0;
 }
 
 /* ---------- footer ---------- */
@@ -685,7 +696,7 @@ figcaption {
   .entry__no { padding-top: 0; }
   .entry__meta { text-align: left; line-height: 1.7; }
   .prose > p { font-size: 18px; }
-  .prose > p:first-of-type::first-letter { font-size: 58px; padding-right: 9px; }
+  .article__body .prose > p:first-of-type::first-letter { font-size: 52px; padding-right: 9px; }
   .prose blockquote p { font-size: 24px; }
   .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .figures__cell { border-bottom: 1px solid var(--ink-faint); }

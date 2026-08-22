@@ -14,6 +14,18 @@ summaryLength = 30
   # the order the filter chips appear in; anything not listed goes last, A-Z
   label_order = ['Tech', 'Data', 'AI', 'Thoughts', 'Music', 'Art & Science']
   description = "Writing about tech, data and AI — what I built, what broke, and what it cost."
+  # comments as GitHub Discussions; remove this table to switch comments off
+  # site-wide. The two IDs are GraphQL node IDs, not the names beside them:
+  #   gh api repos/yc2984/yc2984.github.io --jq .node_id
+  #   gh api graphql -f query='{repository(owner:"yc2984",name:"yc2984.github.io"){discussionCategories(first:20){nodes{id name}}}}'
+  [params.giscus]
+    repo       = "yc2984/yc2984.github.io"
+    repoID     = "R_kgDOK1t7BA"
+    # Announcements: only maintainers can open threads, so giscus creates one
+    # per page on demand and nobody can spam the category with new ones.
+    category   = "Announcements"
+    categoryID = "DIC_kwDOK1t7BM4DD9Ew"
+
   # shown in the top-right of the chrome rail
   [[params.links]]
     name = "GitHub"
