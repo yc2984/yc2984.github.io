@@ -1,0 +1,5 @@
+{{- /* Every image goes through the duotone treatment, wrapped in a figure. */ -}}
+<figure>
+  <span class="duotone"><img src="{{ .Destination | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async"></span>
+  {{- with .Text }}<figcaption>{{ . | safeHTML }}</figcaption>{{ end -}}
+</figure>

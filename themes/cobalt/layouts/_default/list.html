@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <div class="masthead">
+    <h1>{{ .Title | markdownify }}</h1>
+  </div>
+
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+
+  <div class="index index--inner">
+    {{ range $i, $p := .Pages.ByDate.Reverse }}
+      {{ partial "entry.html" (dict "page" $p "no" (add $i 1)) }}
+    {{ end }}
+  </div>
+{{ end }}

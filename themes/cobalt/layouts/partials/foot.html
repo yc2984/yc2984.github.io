@@ -1,0 +1,7 @@
+<footer class="foot">
+  <span>&copy; {{ now.Format "2006" }} {{ site.Title }}</span>
+  <span>
+    {{- with site.Home.OutputFormats.Get "rss" }}<a href="{{ .RelPermalink }}">Subscribe</a> &#183; {{ end -}}
+    Built with Hugo
+  </span>
+</footer>

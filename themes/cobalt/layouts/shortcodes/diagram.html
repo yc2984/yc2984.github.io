@@ -1,0 +1,8 @@
+{{- /*
+  Wraps inline SVG so it inherits the ink and scrolls rather than overflowing.
+  {{< diagram caption="Fig. 1 — the request path" >}}<svg …>…</svg>{{< /diagram >}}
+*/ -}}
+<figure class="diagram">
+  {{ .Inner | safeHTML }}
+  {{- with .Get "caption" }}<figcaption>{{ . }}</figcaption>{{ end -}}
+</figure>

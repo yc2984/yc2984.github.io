@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <div class="masthead">
+    <h1>{{ .Title }}</h1>
+  </div>
+
+  <div class="index">
+    <div class="terms">
+      {{ range .Data.Terms.Alphabetical }}
+        <a class="term" href="{{ .Page.RelPermalink }}">
+          <span class="term__name">{{ .Page.Title }}</span>
+          <span class="term__count">{{ .Count }}</span>
+        </a>
+      {{ end }}
+    </div>
+  </div>
+{{ end }}

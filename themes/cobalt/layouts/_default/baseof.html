@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="{{ or site.Language.LanguageCode "en" }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="wrap">
+    {{ partial "rail.html" . }}
+    <main id="main">
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ partial "foot.html" . }}
+  </div>
+</body>
+</html>

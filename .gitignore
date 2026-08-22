@@ -1,0 +1,6 @@
+# Hugo build output — GitHub Actions builds this, it doesn't belong in git
+public/
+resources/
+.hugo_build.lock
+
+.DS_Store

@@ -1,0 +1,19 @@
+{{ define "main" }}
+  {{ partial "ornament.html" . }}
+
+  <div class="masthead">
+    <h1>{{ with .Params.masthead }}{{ . | safeHTML }}{{ else }}{{ site.Title }}{{ end }}</h1>
+  </div>
+
+  {{ with .Content }}<div class="prose masthead__intro">{{ . }}</div>{{ end }}
+
+  <div class="index">
+    {{ $posts := where site.RegularPages "Section" "posts" }}
+    {{ range $i, $p := first 12 $posts }}
+      {{ partial "entry.html" (dict "page" $p "no" (add $i 1)) }}
+    {{ end }}
+    {{ if gt (len $posts) 12 }}
+      <div class="pager"><span></span><a href="{{ "posts/" | relURL }}">All {{ len $posts }} posts &#8594;</a></div>
+    {{ end }}
+  </div>
+{{ end }}

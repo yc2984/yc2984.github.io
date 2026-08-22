@@ -1,0 +1,14 @@
+{{- /* One row in the index. Expects a dict: page + no. */ -}}
+{{- $p := .page -}}
+<a class="entry" href="{{ $p.RelPermalink }}">
+  <span class="entry__no">{{ printf "%02d" .no }}</span>
+  <span>
+    <h2 class="entry__title">{{ with $p.Params.title_html }}{{ . | safeHTML }}{{ else }}{{ $p.Title }}{{ end }}</h2>
+    {{- with or $p.Params.summary $p.Description }}
+      <span class="entry__summary">{{ . }}</span>
+    {{- end }}
+  </span>
+  <span class="entry__meta">
+    {{ $p.Date.Format "02.01.2006" }}<br>{{ $p.ReadingTime }} min
+  </span>
+</a>

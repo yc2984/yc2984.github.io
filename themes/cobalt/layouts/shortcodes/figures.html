@@ -1,0 +1,18 @@
+{{- /*
+  A row of headline numbers.
+  {{< figures caption="ghz, step load 10→20 rps"
+             items="p50=1.70 s|p99=2.70 s|succeeded=57 %" >}}
+*/ -}}
+<div class="figures">
+  {{- range split (.Get "items") "|" -}}
+    {{- $parts := split . "=" -}}
+    <div class="figures__cell">
+      <div class="figures__label">{{ index $parts 0 }}</div>
+      <div class="figures__value">
+        {{- $v := split (index $parts 1) " " -}}
+        {{ index $v 0 }}{{ if gt (len $v) 1 }}<small>&thinsp;{{ index $v 1 }}</small>{{ end }}
+      </div>
+    </div>
+  {{- end -}}
+</div>
+{{- with .Get "caption" }}<div class="figures__note">{{ . }}</div>{{ end -}}

@@ -1,0 +1,12 @@
+{{ define "main" }}
+  <div class="masthead">
+    <div class="masthead__kicker">Tagged</div>
+    <h1>{{ .Title }}</h1>
+  </div>
+
+  <div class="index index--inner">
+    {{ range $i, $p := .Pages.ByDate.Reverse }}
+      {{ partial "entry.html" (dict "page" $p "no" (add $i 1)) }}
+    {{ end }}
+  </div>
+{{ end }}

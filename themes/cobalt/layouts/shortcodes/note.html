@@ -1,0 +1,5 @@
+{{- /* {{< note "Where I lost an hour" >}} …markdown… {{< /note >}} */ -}}
+<aside class="note">
+  <div class="note__label">{{ or (.Get 0) "Note" }}</div>
+  <div class="note__body">{{ .Inner | markdownify }}</div>
+</aside>

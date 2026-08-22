@@ -1,0 +1,25 @@
+{{- /* The chrome rail. On an article it becomes the breadcrumb + reading meta. */ -}}
+{{- if .IsPage -}}
+<header class="rail article__rail">
+  <a href="{{ "/" | relURL }}">&#8592; {{ site.Title }}</a>
+  <span>{{ .ReadingTime }} min read</span>
+  <span>{{ .Date.Format "02.01.2006" }}</span>
+</header>
+{{- else -}}
+<header class="rail">
+  {{- if not .IsHome }}<a class="rail__home" href="{{ "/" | relURL }}">{{ site.Title }}</a>{{ end }}
+  <nav aria-label="Sections">
+    {{- range site.Menus.main }}
+      <a href="{{ .URL | relURL }}"{{ if or ($.IsHome | and (eq .URL "/")) (and (ne .URL "/") (hasPrefix $.RelPermalink (.URL | relURL))) }} class="is-current" aria-current="page"{{ end }}>{{ .Name }}</a>
+    {{- end }}
+  </nav>
+  <div class="rail__right">
+    {{- range site.Params.links }}
+      <a href="{{ .url }}" rel="me noopener">{{ .name }}</a>
+    {{- end }}
+    {{- with site.Home.OutputFormats.Get "rss" }}
+      <a href="{{ .RelPermalink }}">RSS</a>
+    {{- end }}
+  </div>
+</header>
+{{- end -}}

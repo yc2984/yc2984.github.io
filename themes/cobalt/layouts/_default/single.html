@@ -1,0 +1,36 @@
+{{ define "main" }}
+  <article>
+    <h1 class="article__title">{{ with .Params.title_html }}{{ . | safeHTML }}{{ else }}{{ .Title }}{{ end }}</h1>
+
+    {{ with .Params.summary }}<p class="standfirst">{{ . }}</p>{{ end }}
+
+    <div class="article__body">
+      {{ if and (.Params.toc | default true) (gt (len .TableOfContents) 60) }}
+        <div class="toc">
+          <div class="toc__label">Contents</div>
+          <nav aria-label="Table of contents">{{ .TableOfContents }}</nav>
+        </div>
+      {{ else }}
+        <div></div>
+      {{ end }}
+
+      <div class="prose">
+        {{ .Content }}
+
+        {{ with .Params.tags }}
+          <p class="article__tags">
+            {{ range . }}<span class="tag">{{ . }}</span>{{ end }}
+          </p>
+        {{ end }}
+      </div>
+    </div>
+
+    {{ $prev := .PrevInSection }}{{ $next := .NextInSection }}
+    {{ if or $prev $next }}
+      <nav class="pager" aria-label="More posts">
+        <span>{{ with $prev }}<a href="{{ .RelPermalink }}">&#8592; {{ .Title | plainify | truncate 46 }}</a>{{ end }}</span>
+        <span>{{ with $next }}<a href="{{ .RelPermalink }}">{{ .Title | plainify | truncate 46 }} &#8594;</a>{{ end }}</span>
+      </nav>
+    {{ end }}
+  </article>
+{{ end }}
