@@ -70,3 +70,10 @@ summaryLength = 30
   label = 'labels'
   # finer-grained, listed at the foot of a post
   tag = 'tags'
+
+# HTML is never minified: the minifier drops the self-closing slash on <path/>
+# and <rect/> inside inline SVG, and in HTML's foreign-content parsing an
+# unclosed <path> swallows every later sibling, so diagrams lose their lower
+# half on the live site while the unminified preview looks fine (2026-09-10).
+[minify]
+  disableHTML = true
