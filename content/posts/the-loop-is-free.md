@@ -206,8 +206,8 @@ The recorded log is the control.
 For code, the agent greps a local clone.
 Nothing sits between the agent and the source.
 
-A grep is a grep: regex over today's code, byte-range reads.
-The GitHub API is a keyword index of yesterday's.
+A grep is a grep: a regular expression over the code exactly as it is on disk now, and a byte-range read of any file.
+GitHub's code search API can do neither: it matches keywords only, against an index that is rebuilt after a push and lags behind the latest commit.
 Nobody in the hot path: no rate limit, no auth, no third-party outage arriving in the middle of an investigation.
 The tool list stays ours: an MCP passthrough once grew a write tool between deploys, and the agent used it, unprompted.
 Nothing had changed on our side.
