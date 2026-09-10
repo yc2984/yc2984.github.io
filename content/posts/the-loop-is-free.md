@@ -4,7 +4,7 @@ title_html = "The loop is <em>free</em>. Eight decisions behind a self-serve dat
 date = 2026-09-10T09:00:00+02:00
 draft = true
 
-summary = "The agent loop behind a self-serve data agent is seven lines of code, and nothing that makes its answers good is in them. What powers it, the eight decisions that made the answers checkable, and what a thousand real questions revealed about the data underneath."
+summary = "The agent loop behind a self-serve data agent is seven lines of code, and nothing that makes its answers good is in them. What powers it, the eight decisions that made the answers high quality, and what a thousand real questions revealed about the data underneath."
 
 labels = ['AI', 'Data']
 tags = ['ai-agents', 'llm', 'data-engineering', 'slack', 'tool-design', 'observability']
