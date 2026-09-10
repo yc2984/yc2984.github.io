@@ -12,15 +12,11 @@ toc = true
 comments = true
 +++
 
-> "Only a single correct answer using a single correct source."
->
-> Anthropic's data team, on their own analytics agent
+"Only a single correct answer using a single correct source." Anthropic, on their data team's agent.
+{.epigraph}
 
-That line is the reason a self-serve data agent is harder to build than a coding agent.
-A coding agent works in an open space, and its documentation and tests catch it when it invents something.
-A data question has one right answer, from one right source, and nothing downstream to prove you got it.
 A coding agent gets caught by its tests.
-A data agent does not.
+A data agent does not: one right answer, from one right source, and nothing downstream to prove you got it.
 Nothing tells you the answer was wrong except a colleague who happens to know better.
 
 And yet the loop that runs the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.

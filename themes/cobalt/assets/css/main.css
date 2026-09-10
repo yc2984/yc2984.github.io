@@ -429,6 +429,15 @@ a:hover { color: var(--ink-soft); }
   padding: 2px 6px;
 }
 
+/* epigraph: a short quotation that opens a post, set small and quiet */
+.prose > p.epigraph {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  margin: 0 0 32px;
+}
+
 /* pull quote — blockquote gets the double rule */
 .prose blockquote {
   margin: 34px 0;
