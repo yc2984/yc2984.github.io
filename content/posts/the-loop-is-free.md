@@ -2,8 +2,8 @@
 title = "Eight decisions behind a self-serve data agent"
 slug = "eight-decisions-behind-a-self-serve-data-agent"
 title_html = "Eight decisions behind a <em>self-serve</em> data agent"
-date = 2026-09-10T09:00:00+02:00
-draft = true
+date = 2026-09-10T23:49:01+02:00
+draft = false
 
 summary = "A self-serve data agent whose answers are grounded in sources you can open. What powers it, the eight decisions that made the answers high quality, and what a thousand real questions revealed about the data underneath."
 
