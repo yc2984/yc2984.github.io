@@ -297,7 +297,7 @@ The refusals matter more than the grants.
           <text x="188" y="63" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" font-weight="700" fill="#B3261E">&#10007; INSERT, CTAS</text>
         
   </svg>
-  <text x="700" y="50" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="currentColor" opacity="0.75">the data warehouse, existing workgroup</text>
+  <text x="690" y="50" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">the data warehouse</text>
   <path d="M10 98 H950" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
   <text x="10" y="140" font-family="inherit" font-size="19" font-weight="600" fill="currentColor">Database role</text>
   <text x="10" y="160" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">read-only</text>
@@ -316,7 +316,7 @@ The refusals matter more than the grants.
           <text x="188" y="63" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" font-weight="700" fill="#B3261E">&#10007; any write</text>
         
   </svg>
-  <text x="700" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="currentColor" opacity="0.75">the application database, read replica</text>
+  <text x="690" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">the app database, read replica</text>
   <path d="M10 198 H950" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
   <text x="10" y="240" font-family="inherit" font-size="19" font-weight="600" fill="currentColor">GitHub App</text>
   <text x="10" y="260" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">token expires hourly</text>
@@ -335,7 +335,7 @@ The refusals matter more than the grants.
           <text x="188" y="63" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" font-weight="700" fill="#B3261E">&#10007; push</text>
         
   </svg>
-  <text x="700" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="currentColor" opacity="0.75">three repositories and no others</text>
+  <text x="690" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">three repositories, no others</text>
   <text x="480" y="308" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.6">every red arrow is proven by a live check that runs the forbidden thing and records the denial</text>
 </svg>
 {{< /diagram >}}
