@@ -402,7 +402,10 @@ Spend your time on the data foundation: the sources you ground in, and what they
 Not on the loop.
 
 Grounding, precisely, means the answer comes from a live call against a source we own rather than from the model's memory.
-Anthropic's data team ended up in the same place with their own agent: the complexity lies in the ambiguity of the data, and once a question is mapped to the right entity in the data model, the SQL becomes the easy part.
+Anthropic's data team ended up in the same place with their own agent.
+
+[PASTE THE SECOND QUOTATION HERE, THE ONE STARTING "FOR SELF-SERVICE AGENTIC BUSINESS ANALYTICS", IN QUOTATION MARKS] Anthropic, on their own data team's agent.
+{.epigraph}
 
 ## What people actually ask
 
