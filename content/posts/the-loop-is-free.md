@@ -433,11 +433,5 @@ On one request it produced five successive answers from five different tables, e
 We do document our tables.
 What we never wrote down is which table is the authority for a given business question, or what its words mean, and one everyday term turns out to name three different things in our own database.
 
-## Work waiting for an owner
-
-The data foundation: column comments the agent can see, a description on every dataset, an authority per business question, an analytics layer.
-Running it safely: per-user identity, disclosure rules as code, memory that survives restarts, real monitoring.
-Product and knowledge: a reaction that files a ticket, the partner-analysis demand, knowledge on demand, evaluations per domain.
-
-None of it is the loop.
+None of that is the loop.
 All of it is the data foundation, and that is where the interesting work is.
