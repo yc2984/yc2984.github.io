@@ -12,14 +12,25 @@ toc = true
 comments = true
 +++
 
-The loop that runs the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
+> "Only a single correct answer using a single correct source."
+>
+> Anthropic's data team, on their own analytics agent
+
+That line is the reason a self-serve data agent is harder to build than a coding agent.
+A coding agent works in an open space, and its documentation and tests catch it when it invents something.
+A data question has one right answer, from one right source, and nothing downstream to prove you got it.
+A coding agent gets caught by its tests.
+A data agent does not.
+Nothing tells you the answer was wrong except a colleague who happens to know better.
+
+And yet the loop that runs the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
 Nothing that makes its answers good is in those seven lines.
 
 The agent lives in Slack and answers colleagues' questions about how a number is calculated, why it looks off, and what the data says.
 Since June it has answered about a thousand of them, from a few dozen people across seven channels, and I never wrote a single instruction.
 There is no onboarding doc.
 People tagged it, it answered, and they told each other.
-Eighty-seven percent of its answers point at a source you can open.
+87% of its answers point at a source you can open.
 
 By the end of this post you will know three things.
 What powers it, and why the AI part is the easy part.
@@ -114,19 +125,10 @@ Nobody reading this would struggle to write those seven lines, and that is exact
 The loop is free.
 Everyone gets the same one.
 
-## "Only a single correct answer using a single correct source"
+## So where does the effort go?
 
-So if the loop is an afternoon, where did the months go?
-
-Anthropic's data team wrote that line about their own analytics agent, and the contrast they drew is the whole problem.
-Coding is an open-ended space that rewards a model's creativity, and documentation and tests catch it when it invents something.
-Analytics is the opposite: one correct answer, one correct source, and no deterministic way of proving you got it right.
-
-A coding agent gets caught by its tests.
-This one does not.
-Nothing downstream tells you the answer was wrong, except a colleague who happens to know better.
-
-So what makes the answers good is curated tools with rich descriptions, and grounding in sources we control.
+If the loop is an afternoon, the months went into what the loop reads.
+Nothing downstream catches a wrong answer, so the answer has to be right the first time, and that comes from two things: curated tools with rich descriptions, and grounding in sources we control.
 Everything that follows is either evidence for that sentence or a consequence of it.
 
 ## Eight decisions
@@ -220,7 +222,7 @@ A classifier degrades exactly as the thing grows.
 {{< /diagram >}}
 
 A description that earns its place does real work.
-The one on the warehouse query tool is a single paragraph doing six jobs: a guarantee the code enforces, that it is read-only; a disclosure limit of a hundred rows; an economic fact the model cannot infer, that a data lake charges for bytes scanned and not rows returned; how to behave, so never select star; where to look first; and do not invent a table name.
+The one on the warehouse query tool is a single paragraph doing six jobs: a guarantee the code enforces, that it is read-only; a disclosure limit of 100 rows; an economic fact the model cannot infer, that a data lake charges for bytes scanned and not rows returned; how to behave, so never select star; where to look first; and do not invent a table name.
 Show of hands: who has written a tool description longer than one line?
 
 ### 3. Grounded, and checkable by the reader
@@ -362,7 +364,7 @@ On every start, the pod refuses to come up if its grounding files are missing.
 
 None of that proves an answer is right, so there is also a question bank of real questions colleagues asked, with answers a human verified.
 Each of these runs as one command, so a new maintainer does not have to learn my habits.
-What it buys: fifty-four feature and fix commits since June, shipped the same day, by one person, with no staging soak.
+What it buys: 54 feature and fix commits since June, shipped the same day, by one person, with no staging soak.
 
 ### 7. Start simple: zero infrastructure
 
@@ -401,11 +403,11 @@ Two receipts, because otherwise this is just advice.
 The single biggest speed-up I have measured was not a loop change.
 Code search started as a nested sub-agent.
 I replaced it with three flat tools, grep, read a byte range, list files, each with a description longer than one line.
-One question went from 148 seconds and more than twenty model calls to 78 seconds and six.
+One question went from 148 seconds and more than 20 model calls to 78 seconds and six.
 Same model, same loop, same question.
 
 And the worst failure I have had was not a loop failure either.
-For sixteen days the loop ran perfectly and the answers were worthless, because the grounding files were not in the deployed image.
+For 16 days the loop ran perfectly and the answers were worthless, because the grounding files were not in the deployed image.
 Nothing about the loop would have told me.
 
 ## What a thousand questions said
@@ -420,7 +422,7 @@ Somebody found a way to do their job by asking a Slack bot.
 
 Then the finding that ties the eight decisions to the one line.
 238 of those 518 questions, nearly half, needed somebody to say which source is the authority.
-Seventy-five questions about how a number is calculated could only be answered by reading the source code, because the rule is written down nowhere else at that level of detail.
+75 questions about how a number is calculated could only be answered by reading the source code, because the rule is written down nowhere else at that level of detail.
 On 171 the agent had to inspect what a table and its columns mean before it could answer at all.
 
 On one request it gave five answers in a row from five different tables, each of which looked authoritative.
@@ -443,7 +445,7 @@ The data foundation is the biggest lever, and most of it is not agent code at al
 A description can live in three places: in the tool's own text, which I write; in a file shipped with the agent, which is a copy of somebody else's schema; or next to the data itself, written by whoever owns it.
 Two tests decide which is right: does the upkeep scale, and is there a single source of truth.
 The tool text passes both, because there are only ten tools.
-The shipped dictionary fails both: 75 kilobytes, about nineteen thousand tokens riding on every call, and a copy that goes stale without anyone noticing.
+The shipped dictionary fails both: 75 kilobytes, about 19,000 tokens riding on every call, and a copy that goes stale without anyone noticing.
 Comments next to the data pass both and scale to every column.
 Every fact lives once, in the place where it is already true.
 So the work is column comments the agent can see, a description on every dataset, and an authority written down for every business question.
