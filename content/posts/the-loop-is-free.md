@@ -1,6 +1,7 @@
 +++
-title = "The loop is free. Eight decisions behind a self-serve data agent."
-title_html = "The loop is <em>free</em>. Eight decisions behind a self-serve data agent."
+title = "Eight decisions behind a self-serve data agent"
+slug = "eight-decisions-behind-a-self-serve-data-agent"
+title_html = "Eight decisions behind a <em>self-serve</em> data agent"
 date = 2026-09-10T09:00:00+02:00
 draft = true
 
