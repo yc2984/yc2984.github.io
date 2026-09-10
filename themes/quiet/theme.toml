@@ -1,0 +1,4 @@
+name = "Quiet Editorial"
+license = "MIT"
+description = "One ink on warm paper. Instrument Serif display, Instrument Sans body, system monospace for code. No grid, no ornament. Overrides only the stylesheet, the font link and the home page; every other layout comes from cobalt, so it must be listed before cobalt in hugo.toml."
+min_version = "0.128.0"

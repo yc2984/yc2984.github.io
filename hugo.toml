@@ -1,6 +1,10 @@
 baseURL = 'https://yc2984.github.io/'
 languageCode = 'en-gb'
 title = 'Yang Cao'
+# The look is one line. Two themes ship with the site:
+#   theme = 'cobalt'            cream paper, cobalt ink, graph-paper ground
+#   theme = ['quiet', 'cobalt'] one ink on warm paper; quiet overrides css, fonts and
+#                               the home page and inherits every other layout from cobalt
 theme = 'cobalt'
 
 enableRobotsTXT = true

@@ -7,6 +7,13 @@ Theme: **Cobalt Grid**, in [`themes/cobalt/`](themes/cobalt/) — cream paper, o
 cobalt ink, a graph-paper ground. Newsreader for display, Hanken Grotesk for
 body, DM Mono for chrome.
 
+Switching the look is one line in `hugo.toml`: `theme = 'cobalt'` for the cobalt
+grid, or `theme = ['quiet', 'cobalt']` for [`themes/quiet/`](themes/quiet/), one
+ink on warm paper. `quiet` overrides only the stylesheet, the font link and the
+home page and inherits every other layout from `cobalt`, so it must be listed
+first. Both build from the same content; run `hugo --theme quiet,cobalt` to
+check the other one without editing the config.
+
 ## Running it
 
 ```bash

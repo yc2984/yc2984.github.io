@@ -1,4 +1,4 @@
 name = "Cobalt Grid"
 license = "MIT"
-description = "Quiet editorial: one ink on warm paper. Instrument Serif display, Instrument Sans body, system monospace for code. No grid, no ornament."
+description = "A two-ink editorial theme: cream paper, one cobalt, a graph-paper ground. Newsreader serif display, Hanken Grotesk body, DM Mono chrome."
 min_version = "0.128.0"

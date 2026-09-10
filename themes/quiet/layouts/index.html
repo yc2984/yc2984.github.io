@@ -1,6 +1,4 @@
 {{ define "main" }}
-  {{ partial "ornament.html" . }}
-
   <div class="masthead masthead--home">
     <h1>{{ with .Params.masthead }}{{ . | safeHTML }}{{ else }}{{ site.Title }}{{ end }}</h1>
   </div>
