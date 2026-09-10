@@ -312,7 +312,91 @@ Nothing to host, nothing to store, nothing to be paged about.
 ### 8. Telemetry from day one
 
 Every answer is recorded: the tools, the rounds, the exact SQL.
+
+{{< diagram caption="Fig. 4: two things the record answers without new instrumentation. Where the agent looks, as tool calls grouped by source with the share of answers that touched each; and how long it thinks, as rounds per answer." >}}
+<svg viewBox="0 0 960 440" role="img" aria-label="Left: tool calls per tool, grouped by source, from the telemetry of every Slack answer. The application database is queried most, then the warehouse, then the code, then the documentation. Right: rounds per answer, a long-tailed distribution with an average of 6.8.">
+<text x="20" y="30" font-family="inherit" font-size="16" font-weight="600" fill="currentColor">Where it looks</text>
+<text x="20" y="48" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">tool calls, June to September</text>
+<text x="20" y="78" font-family="inherit" font-size="13" font-weight="600" fill="currentColor">App database</text>
+<text x="150" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">in 55% of answers</text>
+<text x="142" y="99" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">query_db</text>
+<path d="M150 88 h286.0 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-286.0 z" fill="currentColor" opacity="0.85"/>
+<text x="446.0" y="99" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">3,876</text>
+<text x="142" y="119" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">describe_table</text>
+<path d="M150 108 h78.8250773993808 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-78.8250773993808 z" fill="currentColor" opacity="0.85"/>
+<text x="238.8250773993808" y="119" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">1,107</text>
+<text x="20" y="142" font-family="inherit" font-size="13" font-weight="600" fill="currentColor">Warehouse</text>
+<text x="150" y="142" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">in 34% of answers</text>
+<text x="142" y="163" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">query_warehouse</text>
+<path d="M150 152 h125.96130030959753 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-125.96130030959753 z" fill="currentColor" opacity="0.85"/>
+<text x="285.9613003095975" y="163" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">1,737</text>
+<text x="142" y="183" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">describe_table</text>
+<path d="M150 172 h44.70743034055727 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-44.70743034055727 z" fill="currentColor" opacity="0.85"/>
+<text x="204.70743034055727" y="183" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">651</text>
+<text x="142" y="203" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">list_tables</text>
+<path d="M150 192 h13.732198142414859 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-13.732198142414859 z" fill="currentColor" opacity="0.85"/>
+<text x="173.73219814241486" y="203" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">237</text>
+<text x="20" y="226" font-family="inherit" font-size="13" font-weight="600" fill="currentColor">The code</text>
+<text x="150" y="226" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">in 28% of answers</text>
+<text x="142" y="247" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">grep_code</text>
+<path d="M150 236 h72.61506707946336 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-72.61506707946336 z" fill="currentColor" opacity="0.85"/>
+<text x="232.61506707946336" y="247" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">1,024</text>
+<text x="142" y="267" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">read_file</text>
+<path d="M150 256 h50.31888544891641 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-50.31888544891641 z" fill="currentColor" opacity="0.85"/>
+<text x="210.3188854489164" y="267" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">726</text>
+<text x="142" y="287" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">list_files</text>
+<path d="M150 276 h3.1078431372549016 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-3.1078431372549016 z" fill="currentColor" opacity="0.85"/>
+<text x="163.1078431372549" y="287" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">95</text>
+<text x="20" y="310" font-family="inherit" font-size="13" font-weight="600" fill="currentColor">The docs</text>
+<text x="150" y="310" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">in 13% of answers</text>
+<text x="142" y="331" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">search_docs</text>
+<path d="M150 320 h10.8890608875129 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-10.8890608875129 z" fill="currentColor" opacity="0.85"/>
+<text x="170.8890608875129" y="331" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">199</text>
+<text x="142" y="351" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">get_page</text>
+<path d="M150 340 h1.3869969040247678 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-1.3869969040247678 z" fill="currentColor" opacity="0.85"/>
+<text x="161.38699690402476" y="351" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">72</text>
+<text x="590" y="30" font-family="inherit" font-size="16" font-weight="600" fill="currentColor">How long it thinks</text>
+<text x="590" y="48" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">answers by rounds before the model stopped asking</text>
+<path d="M590 330 H940" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+<path d="M591.0 330 v-236.0 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v236.0 z" fill="currentColor" opacity="0.85"/>
+<text x="597.0" y="346" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">1</text>
+<path d="M605.0 330 v-158.5 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v158.5 z" fill="currentColor" opacity="0.85"/>
+<path d="M619.0 330 v-181.3 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v181.3 z" fill="currentColor" opacity="0.85"/>
+<path d="M633.0 330 v-169.2 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v169.2 z" fill="currentColor" opacity="0.85"/>
+<path d="M647.0 330 v-152.5 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v152.5 z" fill="currentColor" opacity="0.85"/>
+<text x="653.0" y="346" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">5</text>
+<path d="M661.0 330 v-126.6 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v126.6 z" fill="currentColor" opacity="0.85"/>
+<path d="M675.0 330 v-105.4 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v105.4 z" fill="currentColor" opacity="0.85"/>
+<path d="M689.0 330 v-87.1 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v87.1 z" fill="currentColor" opacity="0.85"/>
+<path d="M703.0 330 v-65.9 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v65.9 z" fill="currentColor" opacity="0.85"/>
+<path d="M717.0 330 v-44.6 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v44.6 z" fill="currentColor" opacity="0.85"/>
+<text x="723.0" y="346" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">10</text>
+<path d="M731.0 330 v-53.7 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v53.7 z" fill="currentColor" opacity="0.85"/>
+<path d="M745.0 330 v-37.0 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v37.0 z" fill="currentColor" opacity="0.85"/>
+<path d="M759.0 330 v-41.6 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v41.6 z" fill="currentColor" opacity="0.85"/>
+<path d="M773.0 330 v-23.3 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v23.3 z" fill="currentColor" opacity="0.85"/>
+<path d="M787.0 330 v-38.5 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v38.5 z" fill="currentColor" opacity="0.85"/>
+<text x="793.0" y="346" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">15</text>
+<path d="M801.0 330 v-61.3 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v61.3 z" fill="currentColor" opacity="0.85"/>
+<path d="M815.0 330 v-27.9 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v27.9 z" fill="currentColor" opacity="0.85"/>
+<path d="M829.0 330 v-23.3 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v23.3 z" fill="currentColor" opacity="0.85"/>
+<path d="M843.0 330 v-3.6 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v3.6 z" fill="currentColor" opacity="0.85"/>
+<path d="M857.0 330 v-3.6 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v3.6 z" fill="currentColor" opacity="0.85"/>
+<text x="863.0" y="346" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">20</text>
+<path d="M871.0 330 v-9.7 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v9.7 z" fill="currentColor" opacity="0.85"/>
+<path d="M885.0 330 v-0.0 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v0.0 z" fill="currentColor" opacity="0.85"/>
+<path d="M899.0 330 v-0.0 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v0.0 z" fill="currentColor" opacity="0.85"/>
+<path d="M913.0 330 v-0.0 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v0.0 z" fill="currentColor" opacity="0.85"/>
+<path d="M927.0 330 v-6.6 a4 4 0 0 1 4 -4 h4.0 a4 4 0 0 1 4 4 v6.6 z" fill="currentColor" opacity="0.85"/>
+<text x="933.0" y="346" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">25</text>
+<path d="M677.5 100 V330" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
+<text x="683.5" y="112" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="700" fill="currentColor">6.8 rounds on average</text>
+<text x="940" y="364" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">158 answers needed one round; 7 ran to the last</text>
+</svg>
+{{< /diagram >}}
+
 Out of that one record come the things I actually wanted to know: what people ask, where the gaps are, what data is missing, which of our own words confuse us, and how to tune the agent's tools, rounds and cost.
+The figure is two of those, read straight off the log: the application database is where most questions go, the documentation is where the fewest do, and most answers finish in a handful of rounds with a long tail that runs to the cap.
 Build the measuring before you need the measurement.
 Every number in this post came out of it.
 
