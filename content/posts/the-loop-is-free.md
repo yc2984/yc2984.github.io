@@ -15,31 +15,32 @@ comments = true
 "Only a single correct answer using a single correct source." Anthropic, on their data team's agent.
 {.epigraph}
 
-A coding agent works in an open space, and its documentation and tests catch it when it invents something.
-A data agent gets one right answer, from one right source, and nothing downstream proves it got there.
+A coding agent has an easy life.
+Documentation and tests sit downstream of everything it writes, so when it invents a function that does not exist, something fails and somebody notices.
+A data agent gets none of that.
+There is one right answer, it lives in one right source, and if the agent picks the wrong table and writes confident SQL against it, the number that comes back looks exactly like a correct one.
+Nothing downstream will ever tell you.
 
-And yet the loop that runs the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
+Which makes it slightly embarrassing that the loop running the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
 Nothing that makes its answers good is in those seven lines.
-What makes them good is curated tools with rich descriptions, and grounding in sources we control.
+What makes them good is curated tools with rich descriptions, and grounding in sources we control, and the rest of this post is that sentence taken apart.
 
+First, the receipt.
 The agent lives in Slack.
-Since June it has answered 1,057 questions over 64 active days, from 57 people across 7 channels, and no onboarding doc exists.
-87% of its answers point at a source you can open.
+Since June it has answered 1,057 questions on 64 active days, from 57 people across seven channels, and no onboarding doc exists; people tagged it, it answered, and they told each other.
+87% of its answers point at a source you can open, which is the property I care about most and the one the rest of this post is organised around.
 
-By the end of this post you will know three things.
-What powers it.
-The eight decisions that made the answers high quality.
-And what the questions revealed about the data underneath.
-Enough to build an agent like it yourself.
+By the end you should know three things: what powers it, the eight decisions that made the answers high quality, and what a thousand questions revealed about the data underneath.
+That should be enough to build one like it yourself, and I would like you to, because the interesting problems turn out not to be in the agent at all.
 
 ## What powers it
 
 Ask. Run. Hand back. Ask again.
 
 A question arrives in a Slack thread.
-The model gets it, along with ten tools across four sources: the documentation, the application database, the source code, and the data warehouse.
-It asks for a tool, the tool runs, the result is handed back, and the model asks again, 6.8 rounds on average.
-When it stops asking, what it wrote is the answer, with its sources and a note of what it did not check.
+The model receives it together with ten tools spread across four sources: the documentation, the application database, the source code, and the data warehouse.
+It asks for one tool.
+The code runs it, hands the result back, and the model asks again, 6.8 rounds on average, until it stops asking and whatever it has written is the answer, with its sources attached and a note of what it did not check.
 
 {{< diagram caption="Fig. 1: one question in, one cited answer out. Four sources, ten tools, one loop, no router." >}}
 <svg viewBox="0 0 960 560" role="img" aria-label="A question from a Slack thread enters the agent loop: the model asks for a tool, the tool runs, the result is handed back, 6.8 rounds on average. Out comes a cited answer plus what it did not check. Below, the four sources the ten tools reach: the documentation, the application database, the source code, and the data warehouse.">
@@ -106,27 +107,29 @@ When it stops asking, what it wrote is the answer, with its sources and a note o
 {{< /diagram >}}
 
 That circle is the entire loop, and it is seven lines of code.
-No framework, no knowledge base, no vector database.
-The loop is free.
-Everyone gets the same one.
+There is no framework underneath it, no knowledge base, no vector database, and nothing that decides which of the four boxes to reach for.
+I am not claiming any of this is clever.
+The loop is free, and everyone gets the same one.
+The months went into what the loop reads.
 
 ## Eight decisions
 
 ### 1. Few questions, answered well
 
-Wired in: the documentation, the application database, the source code, the data warehouse.
-Deliberately left out: the internal wiki, free search over Slack, the open web, and anything I cannot vouch for.
-One confidently wrong answer costs more than ten it declines to give.
+Four sources are wired in: the documentation, the application database, the source code, the data warehouse.
+Four are left out on purpose: the internal wiki, free search over Slack, the open web, and anything I cannot vouch for.
+That is not a judgement on those sources.
+It is that I cannot control what comes back from them, and the arithmetic of trust is lopsided: one confidently wrong answer costs more than ten questions the agent politely declines to answer.
+So the wiring stays narrow.
 
 ### 2. Rich descriptions, not predefined routes
 
 There is no router.
-A router is a classifier in front of the tools, and a classifier is an if-else in disguise: every new scenario is another branch.
-Instead, the model reads all ten tool descriptions and decides where to look.
-Adding a source is writing one description.
-Fixing routing is sharpening a sentence.
-Descriptions scale.
-A classifier degrades as the scenarios multiply.
+The obvious design puts a classifier in front of the tools to decide whether a question is about code or data or documentation, and the obvious design is an if-else in disguise: every new scenario becomes another branch, and it degrades exactly as the scenarios multiply.
+Instead the model reads all ten tool descriptions and decides for itself where to look.
+Adding a source means writing one description.
+Fixing a routing mistake means sharpening a sentence.
+Descriptions scale in a way a classifier never will, and they are where most of my writing time on this project has gone.
 
 {{< diagram caption="Fig. 2: a router is an if-else in disguise. Rich descriptions put every tool in view and let the model pick." >}}
 <svg viewBox="0 0 980 260" role="img" aria-label="Left: a router. The question goes to a classifier that forwards it to one tool; a wrong guess strands it at the wrong tool. Right: rich descriptions. The question and all ten described tools go to one model, which reads every description and picks.">
@@ -194,32 +197,31 @@ A classifier degrades as the scenarios multiply.
 
 ### 3. Grounded and reproducible
 
-Every answer has to be checkable by the reader, and that is enforced by code, not requested in a prompt.
-The sources are recorded by code: the loop logs every source it opens, and the model cannot edit that record.
-No sources, and it says so: zero sources stamps the answer as from general knowledge, not verified.
-The exact SQL, verbatim: a button on the answer replays every query exactly as it ran.
-The references section is the model writing.
-The recorded log is the control.
+Every answer has to be checkable by the person reading it, and I mean enforced by code rather than requested in a prompt.
+Three mechanisms do it.
+The sources are recorded by code: the loop logs every source it opens, and the model cannot edit that record, so it cannot cite a page it never fetched.
+If it finishes with no sources, the code says so and stamps the answer as from general knowledge, not verified.
+And every query is kept verbatim as it ran, behind a button on the answer that replays the chain.
+The References section you read in Slack is the model writing.
+The recorded log underneath is the control, and the log is the thing I audit.
 
 ### 4. Clone the repo. Do not wrap it in a protocol
 
-For code, the agent greps a local clone.
-Nothing sits between the agent and the source.
-
-A grep is a grep: a regular expression over the code exactly as it is on disk now, and a byte-range read of any file.
-GitHub's code search API can do neither: it matches keywords only, against an index that is rebuilt after a push and lags behind the latest commit.
-Nobody in the hot path: no rate limit, no auth, no third-party outage arriving in the middle of an investigation.
-The tool list stays ours: an MCP passthrough once grew a write tool between deploys, and the agent used it, unprompted.
-Nothing had changed on our side.
-Ripgrep over a local clone is what makes Claude Code good at code.
-Same mechanism here.
+For code, the agent greps a local clone, and nothing sits between it and the source.
+A grep is a grep: a regular expression over the files exactly as they are on disk, and a byte-range read of any of them.
+GitHub's code search API can do neither; it matches keywords against an index rebuilt after each push, so it is both less precise and a little behind.
+There is also nobody in the hot path: no rate limit, no auth, no third-party outage arriving halfway through an investigation.
+And the tool list stays ours.
+An MCP passthrough once grew a write tool between two deploys, and the agent used it, unprompted, while nothing had changed on our side.
+If you use Claude Code you already trust this mechanism, because ripgrep over a local checkout is what makes it good at code.
+The same thing works here.
 
 ### 5. Guardrails, written as refusals
 
-Its guardrails are its permissions: three identities of its own, and what each one is refused.
-A cloud role with no stored key that rotates hourly, for the warehouse.
-A read-only database role, for the application database.
-A GitHub App whose token expires hourly, for three repositories and no others.
+The agent's guardrails are its permissions, not a paragraph of English in the prompt.
+It has three identities of its own: a cloud role with no stored key that rotates hourly, for the warehouse; a read-only database role, for the application database; and a GitHub App whose token expires hourly and can see three repositories and no others.
+The green arrows in the figure are what each identity may do.
+The red ones are the product.
 
 {{< diagram caption="Fig. 3: three identities of its own, and what each is refused. The red arrows are the product." >}}
 <svg viewBox="0 0 960 320" role="img" aria-label="Three identities, one per lane. The cloud role can query and read the warehouse; INSERT and CTAS are refused. The database role can SELECT from the application database; any write is refused. The GitHub App can clone and read three repositories; push is refused.">
@@ -283,50 +285,49 @@ A GitHub App whose token expires hourly, for three repositories and no others.
 </svg>
 {{< /diagram >}}
 
-Every blocked arrow is proven by a live check that runs the forbidden thing.
+Every blocked arrow is proven by a live check that runs the forbidden thing and records the denial.
 
-### 6. Safe to deploy, and fast to change
+### 6. Safe to deploy, fast to change
 
-Read it as a timeline.
-On commit, 433 tests, and a red suite cannot land.
-On push, CI runs inside the image, the container the cluster runs.
-After deploy, live checks run as the pod: capabilities, fences, identity, and every answer must name its sources.
-On every start, a startup check: no grounding files, no start.
+I wanted this from day one: a CI strict enough that merging is boring, because boring merges are what let one person deploy continuously and iterate fast without lying awake.
+So the guarding happens at every stage.
+On commit, 433 tests run as a gate and a red suite cannot land.
+On push, CI runs inside the image, the same container the cluster will run, so a green runner proves something about the artefact and not about the runner.
+After deploy, live checks run as the pod itself: can it reach every source, are the fences holding, is it the checkout we think it is, and does every answer name its sources.
+On every start the pod looks for its grounding files and refuses to come up without them.
 
-Answer quality has its own check, a question bank of real colleague questions with human-verified answers.
-Each of these is one command: evaluate offline, test the live agent, verify a deploy.
-Shipping rides the same GitOps path every other service uses.
-Nothing bespoke.
-Everything that proves the deployed agent runs in the image the cluster runs.
+None of that says an answer is right, so there is a question bank of real colleague questions with human-verified answers for that.
+Each check is one command: evaluate offline, test the live agent, verify a deploy.
+Shipping rides the same GitOps path every other service uses, nothing bespoke.
+Everything that proves the deployed agent proves it in the image the cluster runs.
 No works-on-my-machine.
 
 ### 7. Start simple: zero infrastructure
 
-The agent is one pod that dials out to Slack over one websocket.
-Nothing comes in: no endpoint, no webhook.
-The thread is the memory, re-read on every mention, nothing stored.
-Unchanged since the hackathon, and 0 outage mentions in roughly 400 questions since the cutover to the cluster.
-Nothing to host.
-Nothing to store.
+The agent is one pod that dials out to Slack over one websocket, and nothing comes in: no endpoint, no webhook, no address to attack.
+The thread is the memory, re-read on every mention, so nothing is stored anywhere.
+That drawing has not changed since the hackathon, and since the move to the cluster there have been zero outage mentions in roughly 400 questions.
+Nothing to host, nothing to store, nothing to be paged about.
 
 ### 8. Telemetry from day one
 
 Every answer is recorded: the tools, the rounds, the exact SQL.
-From that one record: what people actually ask, where the gaps are, what data is missing, which of our own words confuse us, and how to tune the agent's tools, rounds and cost.
+Out of that one record come the things I actually wanted to know: what people ask, where the gaps are, what data is missing, which of our own words confuse us, and how to tune the agent's tools, rounds and cost.
 Build the measuring before you need the measurement.
+Every number in this post came out of it.
 
 ## The one line to leave with
 
 Spend your time on the data foundation: the sources you ground in, and what they say about themselves.
 Not on the loop.
 
-Grounding means the answer comes from a live call against a source we own, not from the model's memory.
-Anthropic's data team reached the same place with their own agent: the complexity lies in the ambiguity of the data, and once a question is mapped to the right entity in the data model, the SQL is the easy part.
+Grounding, precisely, means the answer comes from a live call against a source we own rather than from the model's memory.
+Anthropic's data team ended up in the same place with their own agent: the complexity lies in the ambiguity of the data, and once a question is mapped to the right entity in the data model, the SQL becomes the easy part.
 
 ## What people actually ask
 
-The first 518 of the 1,057 questions, read and themed by hand.
-The six biggest themes:
+I read the first 518 of the 1,057 questions by hand and gave each one a theme.
+Six themes cover most of them.
 
 | Theme | Questions |
 |---|---|
@@ -337,30 +338,25 @@ The six biggest themes:
 | Support debugging | 44 |
 | Live progress tracking | 44 |
 
-Two of three questions ask it to query our databases directly.
-The 45 partner-analysis questions have no product serving them today.
-And 0 outage mentions in the roughly 400 questions since the cutover.
+Two of every three questions ask the agent to query our databases directly.
+The 45 partner-analysis questions are a stream of demand that no product serves today.
+And there are zero outage mentions in the roughly 400 questions since the cutover.
 
 ## The one gap
 
 238 of those 518 questions needed somebody to say which source is the authority.
 
-75 were answered by reading the source code.
-Questions about how a number is calculated, from 20 colleagues, in all seven channels, and the rule is written down nowhere except the code itself.
+75 were answered by reading the source code: questions about how a number is calculated, from 20 colleagues in all seven channels, where the rule is written down nowhere except the code itself.
+Another 171 needed the agent to reverse-engineer a table before it could answer at all.
+On one request it produced five successive answers from five different tables, each of which looked authoritative, and every correction came from one colleague's memory.
 
-171 needed the agent to reverse-engineer a table first.
-On one request it gave five successive answers from five different "authoritative" tables before the right one, and every correction came from one colleague's memory.
-
-We document our tables.
-We never record which table is the authority for a given business question, or what its words mean.
-One everyday term names three different things in our own database.
+We do document our tables.
+What we never wrote down is which table is the authority for a given business question, or what its words mean, and one everyday term turns out to name three different things in our own database.
 
 ## Work waiting for an owner
 
 The data foundation: column comments the agent can see, a description on every dataset, an authority per business question, an analytics layer.
-
-Run it safely: per-user identity, disclosure rules as code, memory that survives restarts, real monitoring.
-
+Running it safely: per-user identity, disclosure rules as code, memory that survives restarts, real monitoring.
 Product and knowledge: a reaction that files a ticket, the partner-analysis demand, knowledge on demand, evaluations per domain.
 
 None of it is the loop.
