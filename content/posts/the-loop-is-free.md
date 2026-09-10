@@ -15,7 +15,7 @@ comments = true
 The loop that runs the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
 Nothing that makes its answers good is in those seven lines.
 
-The agent lives in Slack and answers colleagues' questions about how our scores are calculated, why a number looks off, and what the data says.
+The agent lives in Slack and answers colleagues' questions about how a number is calculated, why it looks off, and what the data says.
 Since June it has answered about a thousand of them, from a few dozen people across seven channels, and I never wrote a single instruction.
 There is no onboarding doc.
 People tagged it, it answered, and they told each other.
@@ -30,7 +30,7 @@ Enough, I think, to build one like it yourself.
 ## What powers it
 
 A question arrives in a Slack thread.
-The model gets the question and a list of ten tools across four sources: the methodology documentation, the application database, the scoring source code, and the data warehouse.
+The model gets the question and a list of ten tools across four sources: the documentation, the application database, the source code, and the data warehouse.
 It asks to call one.
 The code runs it, hands the result back, and asks again.
 That circle is the whole engine.
@@ -259,7 +259,7 @@ We did wrap the documentation in an MCP server and passed through whatever it ad
 My own notes said two tools.
 The server started advertising four, and one of the new ones was a write tool that filed feedback against an external system carrying our brand.
 So the agent used it.
-Halfway through a certification question it filed a real documentation issue, unprompted, and told me it had done so.
+Halfway through an ordinary question it filed a real documentation issue, unprompted, and told me it had done so.
 Nothing changed on our side.
 Somebody else's deploy changed what my agent was capable of.
 
@@ -342,7 +342,7 @@ The refusals matter more than the grants.
 
 The part I would steal took me two attempts.
 An over-broad permission never fails a test.
-If I write a test that says the agent can read the assessments table, and someone accidentally grants it write access, the test still passes.
+If I write a test that says the agent can read a given table, and someone accidentally grants it write access, the test still passes.
 So the acceptance criteria are written backwards: not prove it can, prove it cannot.
 Run the forbidden thing as the new identity and record the denial, and pair every refusal check with a permitted neighbour so a check that passes because of a typo gets caught.
 No single thing is load-bearing: a write to the application database is stopped three times, independently.
@@ -412,7 +412,7 @@ Nothing about the loop would have told me.
 
 I read the first 518 questions by hand and gave each one a theme.
 The top of the chart was the thing I did not expect.
-The most common request is not a methodology question.
+The most common request is not a question about how something is calculated.
 It is a data pull: record lookups and exports, 123 of them, from 25 different people.
 Two out of three questions ask the agent to go and query our databases directly.
 One theme, 45 questions, is a sustained analysis programme that no product of ours serves today.
@@ -420,7 +420,7 @@ Somebody found a way to do their job by asking a Slack bot.
 
 Then the finding that ties the eight decisions to the one line.
 238 of those 518 questions, nearly half, needed somebody to say which source is the authority.
-Seventy-five methodology questions could only be answered by reading the scoring source code, because the rule is written down nowhere else at that level of detail.
+Seventy-five questions about how a number is calculated could only be answered by reading the source code, because the rule is written down nowhere else at that level of detail.
 On 171 the agent had to inspect what a table and its columns mean before it could answer at all.
 
 On one request it gave five answers in a row from five different tables, each of which looked authoritative.
@@ -429,7 +429,7 @@ But every correction came out of one colleague's memory.
 That is not an AI problem.
 That colleague is our documentation.
 
-The word underneath it: "portfolio" means three different things in our own database, and the agent cannot tell them apart.
+The word underneath it: one everyday term means three different things in our own database, depending on the table, and the agent cannot tell them apart.
 Neither can a new joiner.
 Making that cheap to check turned tacit confusion into a list, and that list is the most valuable thing the agent has produced.
 It is worth more than any answer it gave.
