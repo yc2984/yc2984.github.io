@@ -12,16 +12,12 @@ toc = true
 comments = true
 +++
 
-"Only a single correct answer using a single correct source." Anthropic, on their data team's agent.
+[PASTE THE FULL TWO-SENTENCE QUOTATION FROM SLIDE 5 HERE, IN QUOTATION MARKS] Anthropic, on their own data team's agent.
 {.epigraph}
 
-A coding agent has an easy life.
-Documentation and tests sit downstream of everything it writes, so when it invents a function that does not exist, something fails and somebody notices.
-A data agent gets none of that.
-There is one right answer, it lives in one right source, and if the agent picks the wrong table and writes confident SQL against it, the number that comes back looks exactly like a correct one.
-Nothing downstream will ever tell you.
+That is the whole difficulty in one place: nothing downstream tells a data agent it was wrong.
 
-Which makes it slightly embarrassing that the loop running the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
+And yet the loop that runs the self-serve data agent I maintain is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
 Nothing that makes its answers good is in those seven lines.
 What makes them good is curated tools with rich descriptions, and grounding in sources we control, and the rest of this post is that sentence taken apart.
 
