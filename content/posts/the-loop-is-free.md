@@ -13,7 +13,7 @@ toc = true
 comments = true
 +++
 
-[PASTE THE FULL TWO-SENTENCE QUOTATION FROM SLIDE 5 HERE, IN QUOTATION MARKS] Anthropic, on their own data team's agent.
+“Coding is an open-ended solution space that rewards the models’ creativity, while documentation and tests provide natural guardrails against hallucination. In contrast, for analytics use cases, there’s often only a single correct answer using a single correct source in which there’s no deterministic way of proving the correctness.” Anthropic, on their own data team’s agent.
 {.epigraph}
 
 That is the whole difficulty in one place: nothing downstream tells a data agent it was wrong.
@@ -405,7 +405,7 @@ Not on the loop.
 Grounding, precisely, means the answer comes from a live call against a source we own rather than from the model's memory.
 Anthropic's data team ended up in the same place with their own agent.
 
-[PASTE THE SECOND QUOTATION HERE, THE ONE STARTING "FOR SELF-SERVICE AGENTIC BUSINESS ANALYTICS", IN QUOTATION MARKS] Anthropic, on their own data team's agent.
+“For self-service agentic business analytics, the complexity mainly lies in the ambiguity of the data. The central problem comes down to our ability to map a user’s question to specific and up-to-date entities in our data model and know the correct way of working with them. If we can do that, then the resulting execution and SQL becomes trivial.” Anthropic, on their own data team’s agent.
 {.epigraph}
 
 ## What people actually ask
