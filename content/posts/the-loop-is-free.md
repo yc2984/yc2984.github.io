@@ -111,7 +111,7 @@ The months went into what the loop reads.
 
 ## Eight decisions
 
-### 1. Few questions, answered well
+### Few questions, answered well {.decision}
 
 Four sources are wired in: the documentation, the application database, the source code, the data warehouse.
 Four are left out on purpose: the internal wiki, free search over Slack, the open web, and anything I cannot vouch for.
@@ -119,7 +119,7 @@ That is not a judgement on those sources.
 It is that I cannot control what comes back from them, and the arithmetic of trust is lopsided: one confidently wrong answer costs more than ten questions the agent politely declines to answer.
 So the wiring stays narrow.
 
-### 2. Rich descriptions, not predefined routes
+### Rich descriptions, not predefined routes {.decision}
 
 There is no router.
 The obvious design puts a classifier in front of the tools to decide whether a question is about code or data or documentation, and the obvious design is an if-else in disguise: every new scenario becomes another branch, and it degrades exactly as the scenarios multiply.
@@ -192,7 +192,7 @@ Descriptions scale in a way a classifier never will, and they are where most of 
 </svg>
 {{< /diagram >}}
 
-### 3. Grounded and reproducible
+### Grounded and reproducible {.decision}
 
 Every answer has to be checkable by the person reading it, and I mean enforced by code rather than requested in a prompt.
 Three mechanisms do it.
@@ -202,7 +202,7 @@ And every query is kept verbatim as it ran, behind a button on the answer that r
 The References section you read in Slack is the model writing.
 The recorded log underneath is the control, and the log is the thing I audit.
 
-### 4. Clone the repo. Do not wrap it in a protocol
+### Clone the repo. Do not wrap it in a protocol {.decision}
 
 For code, the agent greps a local clone, and nothing sits between it and the source.
 A grep is a grep: a regular expression over the files exactly as they are on disk, and a byte-range read of any of them.
@@ -213,7 +213,7 @@ An MCP passthrough once grew a write tool between two deploys, and the agent use
 If you use Claude Code you already trust this mechanism, because ripgrep over a local checkout is what makes it good at code.
 The same thing works here.
 
-### 5. Guardrails, written as refusals
+### Guardrails, written as refusals {.decision}
 
 The agent's guardrails are its permissions, not a paragraph of English in the prompt.
 It has three identities of its own: a cloud role with no stored key that rotates hourly, for the warehouse; a read-only database role, for the application database; and a GitHub App whose token expires hourly and can see three repositories and no others.
@@ -284,7 +284,7 @@ The red ones are the product.
 
 Every blocked arrow is proven by a live check that runs the forbidden thing and records the denial.
 
-### 6. Safe to deploy, fast to change
+### Safe to deploy, fast to change {.decision}
 
 I wanted this from day one: a CI strict enough that merging is boring, because boring merges are what let one person deploy continuously and iterate fast without lying awake.
 So the guarding happens at every stage.
@@ -299,14 +299,14 @@ Shipping rides the same GitOps path every other service uses, nothing bespoke.
 Everything that proves the deployed agent proves it in the image the cluster runs.
 No works-on-my-machine.
 
-### 7. Start simple: zero infrastructure
+### Start simple: zero infrastructure {.decision}
 
 The agent is one pod that dials out to Slack over one websocket, and nothing comes in: no endpoint, no webhook, no address to attack.
 The thread is the memory, re-read on every mention, so nothing is stored anywhere.
 That drawing has not changed since the hackathon, and since the move to the cluster there have been zero outage mentions in roughly 400 questions.
 Nothing to host, nothing to store, nothing to be paged about.
 
-### 8. Telemetry from day one
+### Telemetry from day one {.decision}
 
 Every answer is recorded: the tools, the rounds, the exact SQL.
 
