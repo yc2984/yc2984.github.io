@@ -443,7 +443,6 @@ Six themes cover most of them.
 | Live progress tracking | 44 |
 
 Two of every three questions ask the agent to query our databases directly.
-And there are zero outage mentions in the roughly 400 questions since the cutover.
 
 ## The one gap
 
