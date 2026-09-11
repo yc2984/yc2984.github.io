@@ -18,7 +18,7 @@ comments = true
 
 That is the whole difficulty in one place: nothing downstream tells a data agent it was wrong.
 
-And yet the loop that runs the self-serve data agent I built in a two-day hackathon, and have maintained since, is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
+And yet the loop that runs the self-serve data agent my team and I built in a two-day hackathon, and that I have maintained since, is seven lines: ask the model, run the tool it picks, hand the result back, ask again.
 Nothing that makes its answers good is in those seven lines.
 What makes them good is curated tools with rich descriptions, and grounding in sources we control, and the rest of this post is that sentence taken apart.
 
