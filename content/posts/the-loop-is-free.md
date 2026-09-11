@@ -295,7 +295,7 @@ So the checks are organised by where they run.
 
 On every push: 433 tests with every source mocked, then two assertions inside the built image itself, that the grounding files load and that the code-search program is present.
 Each is run a second time against an empty directory and has to fail there, because a check that passes no matter what tells you nothing.
-Before a merge: live checks against the real sources, that every tool reaches its source, that no write path to production data exists, that the caller is the service role and not a person, that the grounding files are in the image.
+Before a merge, run by hand because they need real credentials against real systems: live checks that every tool reaches its source, that no write path to production data exists, that the caller is the service role and not a person, and that the grounding files are in the image.
 On every start: the pod refuses to come up without its grounding files.
 After a merge: a deploy verification that walks from the merged commit to a verified production pod, ending with a real question posted to the live agent.
 
@@ -303,6 +303,10 @@ None of that says an answer is right.
 A question bank of real colleague questions with human-verified answers does that, read by eye; there is no automatic scoring yet.
 Each check is one command, and shipping rides the same GitOps path as every other service.
 What it buys: one person shipping the same day, repeatedly, with no staging soak.
+
+I want to be honest about the state of this.
+Only the first stage runs on its own; the live checks, the deploy verification and the answer bank are still a person typing a command and reading the result.
+It is far from perfect and far from fully automated, and moving each of those into the pipeline is the work in progress.
 
 Where I want this to go is one step further: the agent evolving itself.
 A failing bank case or a colleague's correction opens a change, the agent proposes the fix, the same gates run against it, and it deploys, with a human reviewing the intent at the top and the fences holding underneath.
