@@ -293,7 +293,7 @@ One question sits under every check: did it run in the environment the code ship
 The pod runs the image, and a green run on my laptop says nothing about the image.
 So the checks are organised by where they run.
 
-| When | What runs | Where | Proves | On its own? |
+| When | What runs | Where | Proves | Auto |
 |---|---|---|---|---|
 | Every commit | 433 unit and component tests, every source mocked | laptop, pre-commit hook | the functions behave; a red suite cannot land | yes |
 | Every push | the same tests, then two assertions inside the built image | CI, inside the image | the image holds its search program and its grounding files | yes |
@@ -431,7 +431,7 @@ I read the first 518 of the 1,057 questions by hand and gave each one a theme.
 Six themes cover most of them.
 
 | Theme | Questions |
-|---|---|
+|---|---:|
 | Record lookups and exports | 123 |
 | How a number is calculated | 75 |
 | Ad-hoc statistics | 72 |
