@@ -24,6 +24,7 @@ What makes them good is curated tools with rich descriptions, and grounding in s
 
 First, the receipt.
 The agent lives in Slack.
+It is now an official product, the first to come out of the engineering team.
 Since June it has answered 1,057 questions on 64 active days, from 57 people across seven channels, and no onboarding doc exists; people tagged it, it answered, and they told each other.
 87% of its answers point at a source you can open, which is the property I care about most and the one the rest of this post is organised around.
 
