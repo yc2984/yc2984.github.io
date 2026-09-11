@@ -289,30 +289,20 @@ Every blocked arrow is proven by a live check that runs the forbidden thing and 
 ### Safe to deploy, fast to change {.decision}
 
 I wanted this from day one: a CI strict enough that merging is boring, because boring merges are what let one person deploy continuously and iterate fast without lying awake.
-One question sits under every check that makes that possible: which environment did it run in, and is that the environment the code ships to?
-The pod runs the image.
-A pass on a laptop checkout proves the laptop checkout, and the two differ in exactly the ways that hurt, a binary that is on my machine and not in the image, a grounding file the build left out.
-So the checks are organised by where they run, not by what they test.
+One question sits under every check: did it run in the environment the code ships to?
+The pod runs the image, and a green run on my laptop says nothing about the image.
+So the checks are organised by where they run.
 
-On every push, automatically: 433 unit and component tests with every external source mocked, then assertions that run inside the built image itself, the same container the cluster will run.
-The search binary is present, the grounding files load, and a control pointed at an empty directory must fail.
-That last one is the pattern that repeats everywhere below: a check that cannot fail is not a check.
-
-Before a merge, by hand: live checks against the real sources.
-Capabilities, that every tool reaches its source.
-Fences, that no write path to production data exists, each refusal paired with a permitted neighbour.
-Identity, that the caller is the service role and not a person.
-Grounding, that the files are in the image.
-On a laptop these prove a baseline under my own credentials; only inside the pod do they prove the deployment, and the identity check fails on a laptop by design.
-
-In the pod, on every start: a startup check that refuses to come up without its grounding files, then reports which sources it can reach.
-
-After a merge, by hand: a deploy verification that walks ten gates from the merged commit to a verified production pod, ending with a real question posted to the live agent.
+On every push: 433 tests with every source mocked, then assertions inside the built image itself, including a control that must fail.
+A check that cannot fail is not a check.
+Before a merge: live checks against the real sources, that every tool reaches its source, that no write path to production data exists, that the caller is the service role and not a person, that the grounding files are in the image.
+On every start: the pod refuses to come up without its grounding files.
+After a merge: a deploy verification that walks from the merged commit to a verified production pod, ending with a real question posted to the live agent.
 
 None of that says an answer is right.
-A question bank of real colleague questions with human-verified answers does that, read by eye; there is no automatic scoring yet, and I would rather say so than imply there is.
-Each surface is one command, so a new maintainer does not have to learn my habits, and shipping rides the same GitOps path as every other service.
-What it buys is the thing I wanted: one person shipping the same day, repeatedly, with no staging soak.
+A question bank of real colleague questions with human-verified answers does that, read by eye; there is no automatic scoring yet.
+Each check is one command, and shipping rides the same GitOps path as every other service.
+What it buys: one person shipping the same day, repeatedly, with no staging soak.
 
 Where I want this to go is one step further: the agent evolving itself.
 A failing bank case or a colleague's correction opens a change, the agent proposes the fix, the same gates run against it, and it deploys, with a human reviewing the intent at the top and the fences holding underneath.
