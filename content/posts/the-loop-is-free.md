@@ -11,6 +11,7 @@ labels = ['AI', 'Data']
 tags = ['ai-agents', 'llm', 'data-engineering', 'slack', 'tool-design', 'observability']
 toc = true
 comments = true
+image = "og/the-loop-is-free.png"
 +++
 
 “Coding is an open-ended solution space that rewards the models’ creativity, while documentation and tests provide natural guardrails against hallucination. In contrast, for analytics use cases, there’s often only a single correct answer using a single correct source in which there’s no deterministic way of proving the correctness.” Anthropic, on their own data team’s agent.
