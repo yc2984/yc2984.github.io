@@ -295,7 +295,7 @@ So the checks are organised by where they run.
 
 On every push: 433 tests with every source mocked, then two assertions inside the built image itself, that the grounding files load and that the code-search program is present.
 Each is run a second time against an empty directory and has to fail there, because a check that passes no matter what tells you nothing.
-Before a merge, run by hand because they need real credentials against real systems: live checks that every tool reaches its source, that no write path to production data exists, that the caller is the service role and not a person, and that the grounding files are in the image.
+Before a merge, because they need real credentials against real systems: live checks that every tool reaches its source, that no write path to production data exists, that the caller is the service role and not a person, and that the grounding files are in the image.
 On every start: the pod refuses to come up without its grounding files.
 After a merge: a deploy verification that walks from the merged commit to a verified production pod, ending with a real question posted to the live agent.
 
@@ -305,7 +305,7 @@ Each check is one command, and shipping rides the same GitOps path as every othe
 What it buys: one person shipping the same day, repeatedly, with no staging soak.
 
 I want to be honest about the state of this.
-Only the first stage runs on its own; the live checks, the deploy verification and the answer bank are still a person typing a command and reading the result.
+Only the first stage runs on its own; the live checks, the deploy verification and the answer bank are still a person starting them and reading the result, each wrapped as a Claude Code skill so that the person does not have to remember how.
 It is far from perfect and far from fully automated, and moving each of those into the pipeline is the work in progress.
 
 Where I want this to go is one step further: the agent evolving itself.
