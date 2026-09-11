@@ -293,21 +293,21 @@ One question sits under every check: did it run in the environment the code ship
 The pod runs the image, and a green run on my laptop says nothing about the image.
 So the checks are organised by where they run.
 
-On every commit: 433 unit and component tests with every source mocked, run by a pre-commit hook, so a red suite cannot land.
-On every push: CI runs the same tests again, builds the image, and runs two assertions inside the built image itself, that the grounding files load and that the code-search program is present.
-Before a merge, because they need real credentials against real systems: live checks that every tool reaches its source, that no write path to production data exists, that the caller is the service role and not a person, and that the grounding files are in the image.
-On every start: the pod checks that its grounding files are present and refuses to come up without them, then probes every tool's source and logs which ones it can reach.
-After a merge: a deploy verification that walks from the merged commit to a verified production pod, ending with a real question posted to the live agent.
+| When | What runs | Where | Proves | On its own? |
+|---|---|---|---|---|
+| Every commit | 433 unit and component tests, every source mocked | laptop, pre-commit hook | the functions behave; a red suite cannot land | yes |
+| Every push | the same tests, then two assertions inside the built image | CI, inside the image | the image holds its search program and its grounding files | yes |
+| Before a merge | live checks: capabilities, fences, identity, grounding | laptop for a baseline, the pod for proof | every tool reaches its source; no write path to production data; the caller is the service role; the files are in the image | no |
+| Every start | startup check | the pod | grounding files present or no start; which sources are reachable | yes |
+| After a merge | deploy verification | laptop, driving the pod | merged commit to verified production pod, ending with a real question to the live agent | no |
+| Answer quality | question bank of real colleague questions with human-verified answers | inside the image, read by eye | an answer is right, not only that the plumbing works | no |
 
-None of that says an answer is right.
-A question bank of real colleague questions with human-verified answers does that, read by eye; there is no automatic scoring yet.
-Each check is one command, and shipping rides the same GitOps path as every other service.
+Each row is one command, wrapped as a Claude Code skill so nobody has to remember how, and shipping rides the same GitOps path as every other service.
 What it buys: one person shipping a change to production the same day, repeatedly.
 
-I want to be honest about the state of this.
-Only the first stage runs on its own; the live checks, the deploy verification and the answer bank are still a person starting them and reading the result, each wrapped as a Claude Code skill so that the person does not have to remember how.
-There is also no test environment: the pod in production is the only place the service identities exist, so the deployment proof can only run there.
-It is far from perfect and far from fully automated, and moving each of those into the pipeline, with a real test environment in front of production, is the work in progress.
+The last column is the honest part.
+Half the rows still need a person to start them and read the result, there is no automatic scoring of answers, and there is no test environment: the pod in production is the only place the service identities exist, so the deployment proof can only run there.
+Moving each of those into the pipeline, with a real test environment in front of production, is the work in progress.
 
 Where I want this to go is one step further: an agent that learns from its own corrections, and knows where each lesson belongs.
 When a colleague corrects an answer, the cause is one of a few things: a badly designed table, a tool that is missing, a tool description that is unclear, or a piece of tribal knowledge nobody wrote down.
