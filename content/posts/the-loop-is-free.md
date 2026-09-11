@@ -293,8 +293,8 @@ One question sits under every check: did it run in the environment the code ship
 The pod runs the image, and a green run on my laptop says nothing about the image.
 So the checks are organised by where they run.
 
-On every push: 433 tests with every source mocked, then assertions inside the built image itself, including a control that must fail.
-A check that cannot fail is not a check.
+On every push: 433 tests with every source mocked, then two assertions inside the built image itself, that the grounding files load and that the code-search program is present.
+Each is run a second time against an empty directory and has to fail there, because a check that passes no matter what tells you nothing.
 Before a merge: live checks against the real sources, that every tool reaches its source, that no write path to production data exists, that the caller is the service role and not a person, that the grounding files are in the image.
 On every start: the pod refuses to come up without its grounding files.
 After a merge: a deploy verification that walks from the merged commit to a verified production pod, ending with a real question posted to the live agent.
