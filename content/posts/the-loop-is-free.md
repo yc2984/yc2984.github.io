@@ -35,12 +35,12 @@ That should be enough to build one like it yourself, and I would like you to, be
 Ask. Run. Hand back. Ask again.
 
 A question arrives in a Slack thread.
-The model receives it together with ten tools spread across four sources: the documentation, the application database, the source code, and the data warehouse.
+The model receives it together with ten tools spread across four sources: the official documentation, the application database, the source code, and the data warehouse.
 It asks for one tool.
 The code runs it, hands the result back, and the model asks again, 6.8 rounds on average, until it stops asking and whatever it has written is the answer, with its sources attached and a note of what it did not check.
 
 {{< diagram caption="Fig. 1: one question in, one cited answer out. Four sources, ten tools, one loop, no router." >}}
-<svg viewBox="0 0 960 560" role="img" aria-label="A question from a Slack thread enters the agent loop: the model asks for a tool, the tool runs, the result is handed back, 6.8 rounds on average. Out comes a cited answer plus what it did not check. Below, the four sources the ten tools reach: the documentation, the application database, the source code, and the data warehouse.">
+<svg viewBox="0 0 960 560" role="img" aria-label="A question from a Slack thread enters the agent loop: the model asks for a tool, the tool runs, the result is handed back, 6.8 rounds on average. Out comes a cited answer plus what it did not check. Below, the four sources the ten tools reach: the official documentation, the application database, the source code, and the data warehouse.">
   <g fill="none" stroke="currentColor" stroke-width="1.5">
     <rect x="10" y="118" width="170" height="70" rx="12"/>
     <rect x="780" y="118" width="170" height="70" rx="12"/>
@@ -78,7 +78,7 @@ The code runs it, hands the result back, and the model asks again, 6.8 rounds on
   <path d="M480 305 V330" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
   <path d="M115 330 H845 M115 330 V352 M358 330 V352 M602 330 V352 M845 330 V352" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
 <rect x="10" y="352" width="210" height="150" rx="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="115.0" y="382" text-anchor="middle" font-family="inherit" font-size="20" font-weight="600" fill="currentColor">The docs</text>
+<text x="115.0" y="382" text-anchor="middle" font-family="inherit" font-size="20" font-weight="600" fill="currentColor">Official docs</text>
 <text x="115.0" y="402" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">the rule as written</text>
 <text x="115.0" y="426" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">search_docs</text>
 <text x="115.0" y="442" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.75">get_page</text>
@@ -113,8 +113,9 @@ The months went into what the loop reads.
 
 ### Few questions, answered well {.decision}
 
-Four sources are wired in: the documentation, the application database, the source code, the data warehouse.
-Four are left out on purpose: the internal wiki, free search over Slack, the open web, and anything I cannot vouch for.
+Four sources are wired in: the official documentation, the application database, the source code, the data warehouse.
+The documentation is the official one, the version written for our customers and kept accurate, not just any document that mentions the topic.
+Four are left out on purpose: the internal wiki, where a page from two years ago and last week's decision look the same; free search over Slack; the open web; and anything I cannot vouch for.
 That is not a judgement on those sources.
 It is that I cannot control what comes back from them, and the arithmetic of trust is lopsided: one confidently wrong answer costs more than ten questions the agent politely declines to answer.
 So the wiring stays narrow.
@@ -126,7 +127,8 @@ The obvious design puts a classifier in front of the tools to decide whether a q
 Instead the model reads all ten tool descriptions and decides for itself where to look.
 Adding a source means writing one description.
 Fixing a routing mistake means sharpening a sentence.
-Descriptions scale in a way a classifier never will, and they are where most of my writing time on this project has gone.
+Descriptions scale in a way a classifier never will.
+They are also only the visible edge of where the time goes: most of it goes into the data foundation underneath, organising the datasets, modelling the data more logically, and adding metadata and descriptions to the datasets themselves.
 
 {{< diagram caption="Fig. 2: a router is an if-else in disguise. Rich descriptions put every tool in view and let the model pick." >}}
 <svg viewBox="0 0 980 260" role="img" aria-label="Left: a router. The question goes to a classifier that forwards it to one tool; a wrong guess strands it at the wrong tool. Right: rich descriptions. The question and all ten described tools go to one model, which reads every description and picks.">
@@ -344,7 +346,7 @@ Every answer is recorded: the tools, the rounds, the exact SQL.
 <text x="142" y="287" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">list_files</text>
 <path d="M150 276 h3.1078431372549016 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-3.1078431372549016 z" fill="currentColor" opacity="0.85"/>
 <text x="163.1078431372549" y="287" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">95</text>
-<text x="20" y="310" font-family="inherit" font-size="13" font-weight="600" fill="currentColor">The docs</text>
+<text x="20" y="310" font-family="inherit" font-size="13" font-weight="600" fill="currentColor">Official docs</text>
 <text x="150" y="310" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.65">in 13% of answers</text>
 <text x="142" y="331" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor" opacity="0.8">search_docs</text>
 <path d="M150 320 h10.8890608875129 a4 4 0 0 1 4 4 v6 a4 4 0 0 1 -4 4 h-10.8890608875129 z" fill="currentColor" opacity="0.85"/>
@@ -393,7 +395,7 @@ Every answer is recorded: the tools, the rounds, the exact SQL.
 {{< /diagram >}}
 
 Out of that one record come the things I actually wanted to know: what people ask, where the gaps are, what data is missing, which of our own words confuse us, and how to tune the agent's tools, rounds and cost.
-The figure is two of those, read straight off the log: the application database is where most questions go, the documentation is where the fewest do, and most answers finish in a handful of rounds with a long tail that runs to the cap.
+The figure is two of those, read straight off the log: the application database is where most questions go, the official documentation is where the fewest do, and most answers finish in a handful of rounds with a long tail that runs to the cap.
 Build the measuring before you need the measurement.
 Every number in this post came out of it.
 
