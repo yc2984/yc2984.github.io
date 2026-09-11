@@ -55,7 +55,7 @@ The code runs it, hands the result back, and the model asks again, 6.8 rounds on
     <path d="M180 153 H236"/><path d="M230 153 l-9 -4 v8 z" fill="currentColor"/>
     <path d="M724 153 H780"/><path d="M774 153 l-9 -4 v8 z" fill="currentColor"/>
   </g>
-  <svg x="245" y="5" width="470" height="296" viewBox="0 0 470 296">
+  <svg overflow="visible" x="245" y="5" width="470" height="296" viewBox="0 0 470 296">
 
         <defs>
           <marker id="f1-cy-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
@@ -70,10 +70,10 @@ The code runs it, hands the result back, and the model asks again, 6.8 rounds on
         <text x="235" y="266" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="currentColor">one of the ten below</text>
         <path d="M 360 86 C 425 122, 425 178, 348 212" fill="none" stroke="#1F9D63" stroke-width="4" marker-end="url(#f1-cy-ah)"/>
         <path d="M 110 212 C 45 178, 45 122, 110 86" fill="none" stroke="#1F9D63" stroke-width="4" marker-end="url(#f1-cy-ah)"/>
-        <text x="418" y="140" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">asks for</text>
-        <text x="418" y="158" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">a tool</text>
-        <text x="55" y="140" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">result</text>
-        <text x="55" y="158" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">handed back</text>
+        <text x="410" y="116" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">asks for</text>
+        <text x="410" y="133" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">a tool</text>
+        <text x="60" y="116" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">result</text>
+        <text x="60" y="133" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13.5" font-weight="700" fill="#157049">handed back</text>
         <text x="235" y="156" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#157049">&#8635; 6.8 rounds on average</text>
       
   </svg>
