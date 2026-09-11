@@ -300,7 +300,7 @@ So the checks are organised by where they run.
 | Before a merge | live checks: capabilities, fences, identity, grounding | laptop for a baseline, the pod for proof | every tool reaches its source; no write path to production data; the caller is the service role; the files are in the image | no |
 | Every start | startup check | the pod | grounding files present or no start; which sources are reachable | yes |
 | After a merge | deploy verification | laptop, driving the pod | merged commit to verified production pod, ending with a real question to the live agent | no |
-| Answer quality | question bank of real colleague questions with human-verified answers | inside the image, read by eye | an answer is right, not only that the plumbing works | no |
+| Answer quality | question bank of real colleague questions with human-verified answers | inside the image, read by eye | an answer is right, beyond the plumbing working | no |
 
 Each row is one command, wrapped as a Claude Code skill so nobody has to remember how, and shipping rides the same GitOps path as every other service.
 What it buys: one person shipping a change to production the same day, repeatedly.
