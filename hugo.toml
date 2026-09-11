@@ -36,7 +36,7 @@ summaryLength = 30
     url  = "https://github.com/yc2984"
   [[params.links]]
     name = "LinkedIn"
-    url  = "https://www.linkedin.com/in/yangcao"
+    url  = "https://www.linkedin.com/in/yang-cao-energy/"
 
 [[menus.main]]
   name   = "Writing"
