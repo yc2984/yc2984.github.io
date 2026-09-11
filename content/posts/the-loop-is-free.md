@@ -308,8 +308,10 @@ I want to be honest about the state of this.
 Only the first stage runs on its own; the live checks, the deploy verification and the answer bank are still a person starting them and reading the result, each wrapped as a Claude Code skill so that the person does not have to remember how.
 It is far from perfect and far from fully automated, and moving each of those into the pipeline is the work in progress.
 
-Where I want this to go is one step further: the agent evolving itself.
-A failing bank case or a colleague's correction opens a change, the agent proposes the fix, the same gates run against it, and it deploys, with a human reviewing the intent at the top and the fences holding underneath.
+Where I want this to go is one step further: an agent that learns from its own corrections, and knows where each lesson belongs.
+When a colleague corrects an answer, the cause is one of a few things: a badly designed table, a tool that is missing, a tool description that is unclear, or a piece of tribal knowledge nobody wrote down.
+Each of those has a different home, the data model, the code, a description, the documentation, and remembering the correction is worth little unless the fix lands in the right one.
+So the memory I want is not a store of past answers; it is the agent proposing the change at the right layer, the same gates running against it, and a human reviewing the intent at the top while the fences hold underneath.
 The gates exist so that whoever maintains this can be bold.
 Eventually that does not have to be a person.
 
