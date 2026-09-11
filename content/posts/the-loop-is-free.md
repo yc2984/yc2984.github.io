@@ -302,7 +302,7 @@ After a merge: a deploy verification that walks from the merged commit to a veri
 None of that says an answer is right.
 A question bank of real colleague questions with human-verified answers does that, read by eye; there is no automatic scoring yet.
 Each check is one command, and shipping rides the same GitOps path as every other service.
-What it buys: one person shipping the same day, repeatedly, with no staging soak.
+What it buys: one person shipping a change to production the same day, repeatedly.
 
 I want to be honest about the state of this.
 Only the first stage runs on its own; the live checks, the deploy verification and the answer bank are still a person starting them and reading the result, each wrapped as a Claude Code skill so that the person does not have to remember how.
